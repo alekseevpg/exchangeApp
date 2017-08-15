@@ -13,7 +13,8 @@ class ExchangeViewModel {
 
     var toAmountInput: Variable<Float?> = Variable<Float?>(nil)
 
-    var currentExchangeRate: Variable<String> = Variable<String>("")
+    var exchangeRate: Variable<String> = Variable<String>("")
+    var exchangeRateReverted: Variable<String> = Variable<String>("")
 
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
     var storage: [CurrencyType: Variable<Float>] = [.eur: Variable<Float>(0),
@@ -56,7 +57,12 @@ class ExchangeViewModel {
         guard let rate = exchangeRateService.getRate(from: from, to: to) else {
             return
         }
-        currentExchangeRate.value = "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
+        exchangeRate.value = "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
+
+        guard let rateReverted = exchangeRateService.getRate(from: to, to: from) else {
+            return
+        }
+        exchangeRateReverted.value = "1 \(to.toSign()) = \(rateReverted.toString()) \(from.toSign())"
     }
 
     func fromFieldUpdate() {

@@ -8,6 +8,7 @@ class ExchangeViewController: UIViewController {
     var disposeBag = DisposeBag()
     lazy var exchangeBtn = UIButton()
     lazy var exchangeRateLbl = UILabel()
+    lazy var exchangeRateRevertedLbl = UILabel()
 
     lazy var toAmountField: UITextField = {
         return self.createAmountField()
@@ -87,12 +88,29 @@ class ExchangeViewController: UIViewController {
                             self.viewModel.toScrollViewModel.currentItem.value
         }).addDisposableTo(disposeBag)
 
-        viewModel.currentExchangeRate.asObservable()
+        viewModel.exchangeRate.asObservable()
                 .bind(to: exchangeRateLbl.rx.text)
+                .addDisposableTo(disposeBag)
+
+        viewModel.exchangeRateReverted.asObservable()
+                .bind(to: exchangeRateRevertedLbl.rx.text)
                 .addDisposableTo(disposeBag)
     }
 
     private func setupConstraints() {
+        exchangeBtn.snp.makeConstraints({ make in
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview().offset(20)
+            make.width.equalTo(100)
+        })
+
+        exchangeRateLbl.snp.makeConstraints({ make in
+            make.centerX.equalToSuperview()
+            make.trailing.equalTo(exchangeBtn.snp.leading)
+            make.bottom.equalTo(exchangeBtn.snp.bottom)
+            make.top.equalTo(exchangeBtn.snp.top)
+        })
+
         fromScrollView.snp.makeConstraints({ make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -117,18 +135,10 @@ class ExchangeViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-45)
             make.centerY.equalTo(toScrollView.snp.centerY)
         })
-
-        exchangeBtn.snp.makeConstraints({ make in
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(20)
-            make.width.equalTo(100)
-        })
-
-        exchangeRateLbl.snp.makeConstraints({ make in
-            make.centerX.equalToSuperview()
-            make.trailing.equalTo(exchangeBtn.snp.leading)
-            make.bottom.equalTo(exchangeBtn.snp.bottom)
-            make.top.equalTo(exchangeBtn.snp.top)
+        exchangeRateRevertedLbl.snp.makeConstraints({ make in
+            make.leading.equalTo(toAmountField.snp.leading)
+            make.trailing.equalTo(toAmountField.snp.trailing)
+            make.top.equalTo(toAmountField.snp.bottom).offset(20)
         })
 
         keyboardHeight()
@@ -168,6 +178,11 @@ class ExchangeViewController: UIViewController {
         exchangeRateLbl.textAlignment = .center
         exchangeRateLbl.textColor = .white
         view.addSubview(exchangeRateLbl)
+
+        exchangeRateRevertedLbl.textAlignment = .right
+        exchangeRateRevertedLbl.font = UIFont.systemFont(ofSize: 13, weight: UIFontWeightSemibold)
+        exchangeRateRevertedLbl.textColor = UIColor.white.withAlphaComponent(0.8)
+        view.addSubview(exchangeRateRevertedLbl)
     }
 
     private func createAmountField() -> UITextField {
