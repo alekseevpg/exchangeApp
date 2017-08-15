@@ -25,15 +25,18 @@ class CurrencyScrollView: UIView {
 
     init(viewModel: CurrencyScrollViewModel) {
         super.init(frame: .zero)
-
         self.viewModel = viewModel
-        addSubview(scrollView)
-        scrollView.snp.makeConstraints({ make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        })
+        self.createViews()
+        self.setupConstraints()
+        self.bindModel()
+ }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateFrame()
+    }
+
+    private func bindModel() {
         scrollView.rx.didEndDecelerating.subscribe(onNext: { [unowned self] _ in
             let width = self.bounds.width
             let height = self.bounds.height
@@ -52,28 +55,20 @@ class CurrencyScrollView: UIView {
             }
         }).disposed(by: disposeBag)
 
-        scrollView.addSubview(contentView)
-        contentView.snp.makeConstraints({ make in
-            make.top.equalToSuperview()
-            make.height.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(viewModel.items.count + 2)
-        })
-
-        addSubview(pageControl)
-        pageControl.snp.makeConstraints({ make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.height.equalTo(40)
-        })
-        pageControl.numberOfPages = viewModel.items.count
-        pageControl.isUserInteractionEnabled = false
-
         viewModel.currentIndex.asObservable()
                 .bind(to: pageControl.rx.currentPage)
                 .addDisposableTo(disposeBag)
         viewModel.currentIndex.value = 0
+    }
+
+    private func createViews() {
+        addSubview(scrollView)
+
+        scrollView.addSubview(contentView)
+
+        addSubview(pageControl)
+        pageControl.numberOfPages = viewModel.items.count
+        pageControl.isUserInteractionEnabled = false
 
         var firstItem = createCurrencyView(type: viewModel.items.last!, leading: contentView.snp.leading)
         for item in viewModel.items {
@@ -81,11 +76,28 @@ class CurrencyScrollView: UIView {
             firstItem = newLbl
         }
         let lastLbl = createCurrencyView(type: viewModel.items.first!, leading: firstItem.snp.trailing)
+
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateFrame()
+    private func setupConstraints() {
+        scrollView.snp.makeConstraints({ make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        })
+        contentView.snp.makeConstraints({ make in
+            make.top.equalToSuperview()
+            make.height.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(viewModel.items.count + 2)
+        })
+        pageControl.snp.makeConstraints({ make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(40)
+        })
     }
 
     func updateFrame() {

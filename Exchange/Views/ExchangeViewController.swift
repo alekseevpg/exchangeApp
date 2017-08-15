@@ -44,8 +44,6 @@ class ExchangeViewController: UIViewController {
     }
 
     private func bindModel() {
-
-
         fromAmountField.rx.text
                 .subscribe(onNext: { next in
                     self.viewModel.fromAmountString.value = next ?? ""
@@ -75,11 +73,6 @@ class ExchangeViewController: UIViewController {
         exchangeBtn.rx.tap.subscribe(onNext: { [unowned self] in
             self.viewModel.exchange()
         }).addDisposableTo(disposeBag)
-        viewModel.sufficientFundsToExchange.asObservable()
-                .subscribe(onNext: { [unowned self] value in
-                    self.exchangeBtn.isEnabled = value
-                })
-                .addDisposableTo(disposeBag)
 
         Observable.combineLatest(viewModel.sufficientFundsToExchange.asObservable(),
                 viewModel.toAmount.asObservable(),
@@ -113,8 +106,6 @@ class ExchangeViewController: UIViewController {
             make.centerY.equalTo(scroll1.snp.centerY)
         })
 
-
-
         scroll2.snp.makeConstraints({ make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -127,13 +118,11 @@ class ExchangeViewController: UIViewController {
             make.centerY.equalTo(scroll2.snp.centerY)
         })
 
-
         exchangeBtn.snp.makeConstraints({ make in
             make.trailing.equalToSuperview()
             make.top.equalToSuperview().offset(20)
             make.width.equalTo(100)
         })
-
 
         exchangeRateLbl.snp.makeConstraints({ make in
             make.centerX.equalToSuperview()
@@ -168,7 +157,6 @@ class ExchangeViewController: UIViewController {
         scroll2 = CurrencyScrollView(viewModel: viewModel.toScrollViewModel)
         view.addSubview(scroll2)
 
-
         view.addSubview(toAmountField)
 
         exchangeBtn.setTitle("Exchange", for: .normal)
@@ -191,5 +179,4 @@ class ExchangeViewController: UIViewController {
         field.adjustsFontSizeToFitWidth = true
         return field
     }
-
 }
