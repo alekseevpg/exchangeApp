@@ -64,7 +64,7 @@ class ExchangeViewController: UIViewController {
                 })
                 .addDisposableTo(disposeBag)
 
-        viewModel.toAmountInput.asObservable()
+        viewModel.toAmountOutput.asObservable()
                 .map({ item in
                     item.toString()
                 })
@@ -76,13 +76,13 @@ class ExchangeViewController: UIViewController {
         }).addDisposableTo(disposeBag)
 
         Observable.combineLatest(viewModel.sufficientFundsToExchange.asObservable(),
-                viewModel.toAmountInput.asObservable(),
+                viewModel.toAmountOutput.asObservable(),
                 viewModel.fromAmountOutput.asObservable(),
                 viewModel.fromScrollViewModel.currentItem.asObservable(),
                 viewModel.toScrollViewModel.currentItem.asObservable()
         ).subscribe(onNext: { [unowned self] _ in
             self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
-                    self.viewModel.toAmountInput.value != nil &&
+                    self.viewModel.toAmountOutput.value != nil &&
                     self.viewModel.fromAmountOutput.value != nil &&
                     self.viewModel.fromScrollViewModel.currentItem.value !=
                             self.viewModel.toScrollViewModel.currentItem.value

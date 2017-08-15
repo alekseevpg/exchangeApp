@@ -11,7 +11,7 @@ class ExchangeViewModel {
     var fromAmountInput: Variable<String> = Variable<String>("")
     var fromAmountOutput: Variable<Float?> = Variable<Float?>(nil)
 
-    var toAmountInput: Variable<Float?> = Variable<Float?>(nil)
+    var toAmountOutput: Variable<Float?> = Variable<Float?>(nil)
 
     var exchangeRate: Variable<String> = Variable<String>("")
     var exchangeRateReverted: Variable<String> = Variable<String>("")
@@ -71,7 +71,7 @@ class ExchangeViewModel {
         }
         let to = toScrollViewModel.currentItem.value
         let from = fromScrollViewModel.currentItem.value
-        toAmountInput.value = convert(from: from, to: to, amount: amount)
+        toAmountOutput.value = convert(from: from, to: to, amount: amount)
         fromAmountOutput.value = amount
         let currentAmount = self.storage[from]!.value
         self.sufficientFundsToExchange.value = amount <= currentAmount
@@ -85,7 +85,7 @@ class ExchangeViewModel {
         let to = toScrollViewModel.currentItem.value
         let from = fromScrollViewModel.currentItem.value
         fromAmountOutput.value = convert(from: to, to: from, amount: amount)
-        toAmountInput.value = amount
+        toAmountOutput.value = amount
         let currentAmount = self.storage[from]!.value
         self.sufficientFundsToExchange.value = amount <= currentAmount
         self.fromScrollViewModel.sufficientFundsToExchange.value = self.sufficientFundsToExchange.value
@@ -106,6 +106,7 @@ class ExchangeViewModel {
         }
         exchangeRateService.exchange(from: from, to: to, amount: amount)
         fromAmountOutput.value = nil
-        toAmountInput.value = nil
+        toAmountOutput.value = nil
+        fromAmountInput.value = ""
     }
 }
