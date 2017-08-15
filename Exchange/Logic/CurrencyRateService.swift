@@ -26,6 +26,10 @@ class CurrencyRateService {
         }).addDisposableTo(disposeBag)
     }
 
+    func isEnoughFunds(from: CurrencyType, amount: Float) -> Bool {
+        return amount <= currenciesStorage.value[from]!
+    }
+
     func exchange(from: CurrencyType, to: CurrencyType, amount: Float) {
         guard let rate = getRate(from: from, to: to) else {
             return

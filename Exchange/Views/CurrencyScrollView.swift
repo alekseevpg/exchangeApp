@@ -8,14 +8,7 @@ class CurrencyScrollView: UIView {
     var disposeBag = DisposeBag()
     var viewModel: CurrencyScrollViewModel!
 
-    lazy var scrollView: UIScrollView = {
-        var scroll = UIScrollView()
-        scroll.isPagingEnabled = true
-        scroll.translatesAutoresizingMaskIntoConstraints = false
-        scroll.showsHorizontalScrollIndicator = false
-        return scroll
-    }()
-
+    lazy var scrollView = UIScrollView()
     lazy var pageControl = UIPageControl()
     lazy var contentView = UIView()
 
@@ -29,7 +22,7 @@ class CurrencyScrollView: UIView {
         self.createViews()
         self.setupConstraints()
         self.bindModel()
- }
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -62,6 +55,8 @@ class CurrencyScrollView: UIView {
     }
 
     private func createViews() {
+        scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
         addSubview(scrollView)
 
         scrollView.addSubview(contentView)
@@ -76,7 +71,6 @@ class CurrencyScrollView: UIView {
             firstItem = newLbl
         }
         let lastLbl = createCurrencyView(type: viewModel.items.first!, leading: firstItem.snp.trailing)
-
     }
 
     private func setupConstraints() {
@@ -102,7 +96,6 @@ class CurrencyScrollView: UIView {
 
     func updateFrame() {
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: frame.height)
-        print(frame.size)
         scrollView.scrollRectToVisible(CGRect(x: frame.width * CGFloat(viewModel.currentIndex.value + 1), y: 0,
                 width: frame.width, height: frame.height), animated: false)
     }
@@ -119,14 +112,12 @@ class CurrencyScrollView: UIView {
         })
 
         viewModel.sufficientFundsToExchange.asObservable()
-                .map({
-                    return $0 ? UIColor.white : UIColor.red
-                })
+                .map({ $0 ? UIColor.white : UIColor.red })
                 .bind(to: newLbl.amountLbl.rx.textColor)
                 .addDisposableTo(disposeBag)
 
         viewModel.storage[type]!.asObservable()
-                .map({ "You have \(type.toSign())\($0.toString(2))" })
+                .map({ "You have \(type.toSign())\($0.toString())" })
                 .bind(to: newLbl.amountLbl.rx.text)
                 .addDisposableTo(disposeBag)
         return newLbl

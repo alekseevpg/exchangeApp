@@ -17,9 +17,6 @@ class ExchangeViewModel {
     var exchangeRateReverted: Variable<String> = Variable<String>("")
 
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
-    var storage: [CurrencyType: Variable<Float>] = [.eur: Variable<Float>(0),
-                                                    .gbp: Variable<Float>(0),
-                                                    .usd: Variable<Float>(0)]
 
     var exchangeRateService = DIContainer.Instance.resolve(CurrencyRateService.self)!
     init() {
@@ -31,15 +28,6 @@ class ExchangeViewModel {
                     self.updateCurrentExchangeRate()
                 })
                 .addDisposableTo(disposeBag)
-
-        exchangeRateService.currenciesStorage.asObservable()
-                .subscribe(onNext: { rates in
-                    for rate in rates {
-                        if (self.storage[rate.key] != nil) {
-                            self.storage[rate.key]!.value = rate.value
-                        }
-                    }
-                }).addDisposableTo(disposeBag)
 
         Observable.combineLatest(
                         fromScrollViewModel.currentItem.asObservable(),
@@ -65,19 +53,6 @@ class ExchangeViewModel {
         exchangeRateReverted.value = "1 \(to.toSign()) = \(rateReverted.toString()) \(from.toSign())"
     }
 
-    func fromFieldUpdate() {
-        guard let amount = Float(fromAmountInput.value) else {
-            return
-        }
-        let to = toScrollViewModel.currentItem.value
-        let from = fromScrollViewModel.currentItem.value
-        toAmountOutput.value = convert(from: from, to: to, amount: amount)
-        fromAmountOutput.value = amount
-        let currentAmount = self.storage[from]!.value
-        self.sufficientFundsToExchange.value = amount <= currentAmount
-        self.fromScrollViewModel.sufficientFundsToExchange.value = self.sufficientFundsToExchange.value
-    }
-
     func toFieldUpdate(_ str: String?) {
         guard let amount = Float(str ?? "") else {
             return
@@ -85,10 +60,29 @@ class ExchangeViewModel {
         let to = toScrollViewModel.currentItem.value
         let from = fromScrollViewModel.currentItem.value
         fromAmountOutput.value = convert(from: to, to: from, amount: amount)
+        fromAmountInput.value = fromAmountOutput.value.toString()
         toAmountOutput.value = amount
-        let currentAmount = self.storage[from]!.value
-        self.sufficientFundsToExchange.value = amount <= currentAmount
-        self.fromScrollViewModel.sufficientFundsToExchange.value = self.sufficientFundsToExchange.value
+        checkIfEnoughFunds()
+    }
+
+    private func fromFieldUpdate() {
+        guard let amount = Float(fromAmountInput.value) else {
+            return
+        }
+        let to = toScrollViewModel.currentItem.value
+        let from = fromScrollViewModel.currentItem.value
+        toAmountOutput.value = convert(from: from, to: to, amount: amount)
+        fromAmountOutput.value = amount
+        checkIfEnoughFunds()
+    }
+
+    private func checkIfEnoughFunds() {
+        var isEnough = true
+        if let amount = fromAmountOutput.value {
+            isEnough = exchangeRateService.isEnoughFunds(from: fromScrollViewModel.currentItem.value, amount: amount)
+        }
+        sufficientFundsToExchange.value = isEnough
+        fromScrollViewModel.sufficientFundsToExchange.value = isEnough
     }
 
     private func convert(from: CurrencyType, to: CurrencyType, amount: Float) -> Float? {
