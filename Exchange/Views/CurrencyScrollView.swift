@@ -101,8 +101,8 @@ class CurrencyScrollView: UIView {
     }
 
     func updateFrame() {
-        scrollView.contentSize = contentView.frame.size
-        print(contentView.frame.size)
+        scrollView.contentSize = CGSize(width: contentView.frame.width, height: frame.height)
+        print(frame.size)
         scrollView.scrollRectToVisible(CGRect(x: frame.width * CGFloat(viewModel.currentIndex.value + 1), y: 0,
                 width: frame.width, height: frame.height), animated: false)
     }
