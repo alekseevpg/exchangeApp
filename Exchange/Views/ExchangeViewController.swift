@@ -104,13 +104,6 @@ class ExchangeViewController: UIViewController {
             make.width.equalTo(100)
         })
 
-        exchangeRateLbl.snp.makeConstraints({ make in
-            make.centerX.equalToSuperview()
-            make.trailing.equalTo(exchangeBtn.snp.leading)
-            make.bottom.equalTo(exchangeBtn.snp.bottom)
-            make.top.equalTo(exchangeBtn.snp.top)
-        })
-
         fromScrollView.snp.makeConstraints({ make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -122,6 +115,11 @@ class ExchangeViewController: UIViewController {
             make.leading.equalTo(fromScrollView.snp.centerX)
             make.trailing.equalToSuperview().offset(-45)
             make.centerY.equalTo(fromScrollView.snp.centerY)
+        })
+        exchangeRateLbl.snp.makeConstraints({ make in
+            make.leading.equalTo(fromAmountField.snp.leading)
+            make.trailing.equalTo(fromAmountField.snp.trailing)
+            make.top.equalTo(fromAmountField.snp.bottom).offset(20)
         })
 
         toScrollView.snp.makeConstraints({ make in
@@ -175,7 +173,8 @@ class ExchangeViewController: UIViewController {
         exchangeBtn.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .disabled)
         view.addSubview(exchangeBtn)
 
-        exchangeRateLbl.textAlignment = .center
+        exchangeRateLbl.textAlignment = .right
+        exchangeRateLbl.font = UIFont.systemFont(ofSize: 13, weight: UIFontWeightSemibold)
         exchangeRateLbl.textColor = .white
         view.addSubview(exchangeRateLbl)
 
