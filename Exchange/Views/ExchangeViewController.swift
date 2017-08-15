@@ -6,6 +6,9 @@ import RxCocoa
 
 class ExchangeViewController: UIViewController {
     var disposeBag = DisposeBag()
+    lazy var exchangeBtn = UIButton()
+    lazy var exchangeRateLbl = UILabel()
+
     lazy var toAmountField: UITextField = {
         return self.createAmountField()
     }()
@@ -18,23 +21,30 @@ class ExchangeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.createViews()
+        self.setupConstraints()
+        self.bindModel()
+    }
 
-        scroll1 = CurrencyScrollView(viewModel: viewModel.fromScrollViewModel)
-        view.addSubview(scroll1)
-        scroll1.snp.makeConstraints({ make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalTo(view.snp.centerY)
-        })
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        scroll1.updateFrame()
+        scroll2.updateFrame()
+        self.createAdditionalLayers()
+    }
 
-        view.addSubview(fromAmountField)
-        fromAmountField.snp.makeConstraints({ make in
-            make.leading.equalTo(scroll1.snp.centerX)
-            make.trailing.equalToSuperview().offset(-45)
-            make.centerY.equalTo(scroll1.snp.centerY)
-        })
-        fromAmountField.adjustsFontSizeToFitWidth = true
+    private func createAdditionalLayers() {
+        let radialLayer = RadialGradientLayer()
+        self.view.layer.insertSublayer(radialLayer, at: 0)
+        radialLayer.frame = view.bounds
+
+        let shadedLayer = ShadedLayer()
+        scroll2.layer.addSublayer(shadedLayer)
+        shadedLayer.frame = scroll2.bounds
+    }
+
+    private func bindModel() {
+
 
         fromAmountField.rx.text
                 .subscribe(onNext: { next in
@@ -49,22 +59,6 @@ class ExchangeViewController: UIViewController {
                 .bind(to: fromAmountField.rx.text)
                 .addDisposableTo(disposeBag)
 
-        scroll2 = CurrencyScrollView(viewModel: viewModel.toScrollViewModel)
-        view.addSubview(scroll2)
-        scroll2.snp.makeConstraints({ make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalTo(scroll1.snp.bottom)
-            make.bottom.equalToSuperview()
-        })
-
-        view.addSubview(toAmountField)
-        toAmountField.snp.makeConstraints({ make in
-            make.leading.equalTo(scroll2.snp.centerX)
-            make.trailing.equalToSuperview().offset(-45)
-            make.centerY.equalTo(scroll2.snp.centerY)
-        })
-
         toAmountField.rx.text
                 .subscribe(onNext: { next in
                     self.viewModel.toFieldUpdate(next)
@@ -78,23 +72,12 @@ class ExchangeViewController: UIViewController {
                 .bind(to: toAmountField.rx.text)
                 .addDisposableTo(disposeBag)
 
-        let exchangeBtn = UIButton()
-        exchangeBtn.setTitle("Exchange", for: .normal)
-        exchangeBtn.setTitleColor(.white, for: .normal)
-        exchangeBtn.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .highlighted)
-        exchangeBtn.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .disabled)
         exchangeBtn.rx.tap.subscribe(onNext: { [unowned self] in
             self.viewModel.exchange()
         }).addDisposableTo(disposeBag)
-        view.addSubview(exchangeBtn)
-        exchangeBtn.snp.makeConstraints({ make in
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview().offset(20)
-            make.width.equalTo(100)
-        })
         viewModel.sufficientFundsToExchange.asObservable()
-                .subscribe(onNext: { value in
-                    exchangeBtn.isEnabled = value
+                .subscribe(onNext: { [unowned self] value in
+                    self.exchangeBtn.isEnabled = value
                 })
                 .addDisposableTo(disposeBag)
 
@@ -103,28 +86,61 @@ class ExchangeViewController: UIViewController {
                 viewModel.fromAmount.asObservable(),
                 viewModel.fromScrollViewModel.currentItem.asObservable(),
                 viewModel.toScrollViewModel.currentItem.asObservable()
-        ).subscribe(onNext: { _ in
-            exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
+        ).subscribe(onNext: { [unowned self] _ in
+            self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
                     self.viewModel.toAmount.value != nil &&
                     self.viewModel.fromAmount.value != nil &&
                     self.viewModel.fromScrollViewModel.currentItem.value !=
                             self.viewModel.toScrollViewModel.currentItem.value
         }).addDisposableTo(disposeBag)
 
-        var exchangeRateLbl = UILabel()
-        exchangeRateLbl.textAlignment = .center
-        exchangeRateLbl.textColor = .white
-        view.addSubview(exchangeRateLbl)
+        viewModel.currentExchangeRate.asObservable()
+                .bind(to: exchangeRateLbl.rx.text)
+                .addDisposableTo(disposeBag)
+    }
+
+    private func setupConstraints() {
+        scroll1.snp.makeConstraints({ make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalTo(view.snp.centerY)
+        })
+
+        fromAmountField.snp.makeConstraints({ make in
+            make.leading.equalTo(scroll1.snp.centerX)
+            make.trailing.equalToSuperview().offset(-45)
+            make.centerY.equalTo(scroll1.snp.centerY)
+        })
+
+
+
+        scroll2.snp.makeConstraints({ make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(scroll1.snp.bottom)
+            make.bottom.equalToSuperview()
+        })
+        toAmountField.snp.makeConstraints({ make in
+            make.leading.equalTo(scroll2.snp.centerX)
+            make.trailing.equalToSuperview().offset(-45)
+            make.centerY.equalTo(scroll2.snp.centerY)
+        })
+
+
+        exchangeBtn.snp.makeConstraints({ make in
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview().offset(20)
+            make.width.equalTo(100)
+        })
+
+
         exchangeRateLbl.snp.makeConstraints({ make in
             make.centerX.equalToSuperview()
             make.trailing.equalTo(exchangeBtn.snp.leading)
             make.bottom.equalTo(exchangeBtn.snp.bottom)
             make.top.equalTo(exchangeBtn.snp.top)
         })
-
-        viewModel.currentExchangeRate.asObservable()
-                .bind(to: exchangeRateLbl.rx.text)
-                .addDisposableTo(disposeBag)
 
         keyboardHeight()
                 .observeOn(MainScheduler.instance)
@@ -140,19 +156,30 @@ class ExchangeViewController: UIViewController {
                 })
                 .addDisposableTo(disposeBag)
 
-        let radialLayer = RadialGradientLayer()
-        self.view.layer.insertSublayer(radialLayer, at: 0)
-        radialLayer.frame = view.bounds
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        scroll1.updateFrame()
-        scroll2.updateFrame()
+    private func createViews() {
+        scroll1 = CurrencyScrollView(viewModel: viewModel.fromScrollViewModel)
+        view.addSubview(scroll1)
 
-        let shadedLayer = ShadedLayer()
-        scroll2.layer.addSublayer(shadedLayer)
-        shadedLayer.frame = scroll2.bounds
+        view.addSubview(fromAmountField)
+        fromAmountField.adjustsFontSizeToFitWidth = true
+
+        scroll2 = CurrencyScrollView(viewModel: viewModel.toScrollViewModel)
+        view.addSubview(scroll2)
+
+
+        view.addSubview(toAmountField)
+
+        exchangeBtn.setTitle("Exchange", for: .normal)
+        exchangeBtn.setTitleColor(.white, for: .normal)
+        exchangeBtn.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .highlighted)
+        exchangeBtn.setTitleColor(UIColor.white.withAlphaComponent(0.3), for: .disabled)
+        view.addSubview(exchangeBtn)
+
+        exchangeRateLbl.textAlignment = .center
+        exchangeRateLbl.textColor = .white
+        view.addSubview(exchangeRateLbl)
     }
 
     private func createAmountField() -> UITextField {
