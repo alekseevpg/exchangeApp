@@ -19,20 +19,6 @@ class ExchangeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        keyboardHeight()
-                .observeOn(MainScheduler.instance)
-                .subscribe(onNext: { (newKeyboardHeight: CGFloat) in
-                    self.scroll1.snp.updateConstraints({ make in
-                        make.bottom.equalTo(self.view.snp.centerY).offset(-newKeyboardHeight / 2)
-                    })
-                    self.scroll2.snp.updateConstraints({ make in
-                        make.bottom.equalToSuperview().offset(-newKeyboardHeight)
-                    })
-                    self.scroll1.updateFrame()
-                    self.scroll2.updateFrame()
-                })
-                .addDisposableTo(disposeBag)
-
         scroll1 = CurrencyScrollView(viewModel: viewModel.fromScrollViewModel)
         view.addSubview(scroll1)
         scroll1.snp.makeConstraints({ make in
@@ -139,6 +125,24 @@ class ExchangeViewController: UIViewController {
         viewModel.currentExchangeRate.asObservable()
                 .bind(to: exchangeRateLbl.rx.text)
                 .addDisposableTo(disposeBag)
+
+        keyboardHeight()
+                .observeOn(MainScheduler.instance)
+                .subscribe(onNext: { (newKeyboardHeight: CGFloat) in
+                    self.scroll1.snp.updateConstraints({ make in
+                        make.bottom.equalTo(self.view.snp.centerY).offset(-newKeyboardHeight / 2)
+                    })
+                    self.scroll2.snp.updateConstraints({ make in
+                        make.bottom.equalToSuperview().offset(-newKeyboardHeight)
+                    })
+                    self.scroll1.updateFrame()
+                    self.scroll2.updateFrame()
+                })
+                .addDisposableTo(disposeBag)
+
+        let radialLayer = RadialGradientLayer()
+        self.view.layer.insertSublayer(radialLayer, at: 0)
+        radialLayer.frame = view.bounds
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -146,24 +150,7 @@ class ExchangeViewController: UIViewController {
         scroll1.updateFrame()
         scroll2.updateFrame()
 
-        let radialLayer = RadialGradientLayer()
-        self.view.layer.insertSublayer(radialLayer, at: 0)
-        radialLayer.frame = view.bounds
-
-        let shadedLayer = QuartzCore.CAShapeLayer()
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: scroll2.frame.width / 2 - 30, y: 0))
-        path.addLine(to: CGPoint(x: scroll2.frame.width / 2 - 3, y: 28))
-        path.addLine(to: CGPoint(x: scroll2.frame.width / 2, y: 30))
-        path.addLine(to: CGPoint(x: scroll2.frame.width / 2 + 3, y: 28))
-        path.addLine(to: CGPoint(x: scroll2.frame.width / 2 + 30, y: 0))
-        path.addLine(to: CGPoint(x: scroll2.frame.width, y: 0))
-        path.addLine(to: CGPoint(x: scroll2.frame.width, y: scroll2.frame.height))
-        path.addLine(to: CGPoint(x: 0, y: scroll2.frame.height))
-        path.addLine(to: CGPoint(x: 0, y: 0))
-        shadedLayer.path = path.cgPath
-        shadedLayer.fillColor = UIColor.black.withAlphaComponent(0.2).cgColor
+        let shadedLayer = ShadedLayer()
         scroll2.layer.addSublayer(shadedLayer)
         shadedLayer.frame = scroll2.bounds
     }

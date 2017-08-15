@@ -83,16 +83,16 @@ class CurrencyScrollView: UIView {
         let lastLbl = createCurrencyView(type: viewModel.items.first!, leading: firstItem.snp.trailing)
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        updateFrame()
+    }
+
     func updateFrame() {
         scrollView.contentSize = contentView.frame.size
         print(contentView.frame.size)
         scrollView.scrollRectToVisible(CGRect(x: frame.width * CGFloat(viewModel.currentIndex.value + 1), y: 0,
                 width: frame.width, height: frame.height), animated: false)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        updateFrame()
     }
 
     private func createCurrencyView(type: CurrencyType, leading: ConstraintRelatableTarget) -> CurrencyView {
