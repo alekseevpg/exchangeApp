@@ -114,12 +114,15 @@ class ExchangeViewController: UIViewController {
 
         Observable.combineLatest(viewModel.sufficientFundsToExchange.asObservable(),
                 viewModel.toAmount.asObservable(),
-                viewModel.fromAmount.asObservable()
+                viewModel.fromAmount.asObservable(),
+                viewModel.fromScrollViewModel.currentItem.asObservable(),
+                viewModel.toScrollViewModel.currentItem.asObservable()
         ).subscribe(onNext: { _ in
             exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
                     self.viewModel.toAmount.value != nil &&
-                    self.viewModel.fromAmount.value != nil
-
+                    self.viewModel.fromAmount.value != nil &&
+                    self.viewModel.fromScrollViewModel.currentItem.value !=
+                            self.viewModel.toScrollViewModel.currentItem.value
         }).addDisposableTo(disposeBag)
 
         var exchangeRateLbl = UILabel()
