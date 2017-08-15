@@ -37,7 +37,7 @@ class CurrencyScrollView: UIView {
     }
 
     private func bindModel() {
-        scrollView.rx.didEndDecelerating.subscribe(onNext: { [unowned self] _ in
+        scrollView.rx.didEndDecelerating.subscribe(onNext: { _ in
             let width = self.bounds.width
             let height = self.bounds.height
             let offset = self.scrollView.contentOffset

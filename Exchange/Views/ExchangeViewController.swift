@@ -71,7 +71,7 @@ class ExchangeViewController: UIViewController {
                 .bind(to: toAmountField.rx.text)
                 .addDisposableTo(disposeBag)
 
-        exchangeBtn.rx.tap.subscribe(onNext: { [unowned self] in
+        exchangeBtn.rx.tap.subscribe(onNext: { _ in
             self.viewModel.exchange()
         }).addDisposableTo(disposeBag)
 
@@ -80,7 +80,7 @@ class ExchangeViewController: UIViewController {
                 viewModel.fromAmountOutput.asObservable(),
                 viewModel.fromScrollViewModel.currentItem.asObservable(),
                 viewModel.toScrollViewModel.currentItem.asObservable()
-        ).subscribe(onNext: { [unowned self] _ in
+        ).subscribe(onNext: { _ in
             self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
                     self.viewModel.toAmountOutput.value != nil &&
                     self.viewModel.fromAmountOutput.value != nil &&
