@@ -8,10 +8,10 @@ class ExchangeViewModel {
     var fromScrollViewModel = CurrencyScrollViewModel()
     var toScrollViewModel = CurrencyScrollViewModel()
 
-    var fromAmountString: Variable<String> = Variable<String>("")
-    var fromAmount: Variable<Float?> = Variable<Float?>(nil)
+    var fromAmountInput: Variable<String> = Variable<String>("")
+    var fromAmountOutput: Variable<Float?> = Variable<Float?>(nil)
 
-    var toAmount: Variable<Float?> = Variable<Float?>(nil)
+    var toAmountInput: Variable<Float?> = Variable<Float?>(nil)
 
     var currentExchangeRate: Variable<String> = Variable<String>("")
 
@@ -27,10 +27,7 @@ class ExchangeViewModel {
                         toScrollViewModel.currentItem.asObservable(),
                         exchangeRateService.currenciesRates.asObservable())
                 .subscribe(onNext: { _ in
-                    if (self.fromScrollViewModel.currentItem.value == self.toScrollViewModel.currentItem.value) {
-                        self.toScrollViewModel.selectNextCurrency()
-                    }
-                    self.updateRate()
+                    self.updateCurrentExchangeRate()
                 })
                 .addDisposableTo(disposeBag)
 
@@ -45,7 +42,7 @@ class ExchangeViewModel {
 
         Observable.combineLatest(
                         fromScrollViewModel.currentItem.asObservable(),
-                        fromAmountString.asObservable(),
+                        fromAmountInput.asObservable(),
                         toScrollViewModel.currentItem.asObservable(),
                         exchangeRateService.currenciesRates.asObservable())
                 .subscribe(onNext: { next in
@@ -53,24 +50,24 @@ class ExchangeViewModel {
                 }).addDisposableTo(disposeBag)
     }
 
-    func updateRate() {
+    func updateCurrentExchangeRate() {
         let from = fromScrollViewModel.currentItem.value
         let to = toScrollViewModel.currentItem.value
         guard let rate = exchangeRateService.getRate(from: from, to: to) else {
             return
         }
-        currentExchangeRate.value = "1 \(from.toSign()) = \(rate) \(to.toSign())"
+        currentExchangeRate.value = "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
     }
 
     func fromFieldUpdate() {
-        guard let amount = Float(fromAmountString.value) else {
+        guard let amount = Float(fromAmountInput.value) else {
             return
         }
-        var to = toScrollViewModel.currentItem.value
-        var from = fromScrollViewModel.currentItem.value
-        toAmount.value = convert(from: from, to: to, amount: amount)
-        fromAmount.value = amount
-        var currentAmount = self.storage[from]!.value
+        let to = toScrollViewModel.currentItem.value
+        let from = fromScrollViewModel.currentItem.value
+        toAmountInput.value = convert(from: from, to: to, amount: amount)
+        fromAmountOutput.value = amount
+        let currentAmount = self.storage[from]!.value
         self.sufficientFundsToExchange.value = amount <= currentAmount
         self.fromScrollViewModel.sufficientFundsToExchange.value = self.sufficientFundsToExchange.value
     }
@@ -81,9 +78,9 @@ class ExchangeViewModel {
         }
         let to = toScrollViewModel.currentItem.value
         let from = fromScrollViewModel.currentItem.value
-        fromAmount.value = convert(from: to, to: from, amount: amount)
-        toAmount.value = amount
-        var currentAmount = self.storage[from]!.value
+        fromAmountOutput.value = convert(from: to, to: from, amount: amount)
+        toAmountInput.value = amount
+        let currentAmount = self.storage[from]!.value
         self.sufficientFundsToExchange.value = amount <= currentAmount
         self.fromScrollViewModel.sufficientFundsToExchange.value = self.sufficientFundsToExchange.value
     }
@@ -98,11 +95,11 @@ class ExchangeViewModel {
     func exchange() {
         let from = fromScrollViewModel.currentItem.value
         let to = toScrollViewModel.currentItem.value
-        guard let amount = self.fromAmount.value else {
+        guard let amount = self.fromAmountOutput.value else {
             return
         }
         exchangeRateService.exchange(from: from, to: to, amount: amount)
-        fromAmount.value = nil
-        toAmount.value = nil
+        fromAmountOutput.value = nil
+        toAmountInput.value = nil
     }
 }

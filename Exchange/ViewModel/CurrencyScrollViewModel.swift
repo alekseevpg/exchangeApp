@@ -27,10 +27,6 @@ class CurrencyScrollViewModel {
 
         currentIndex.asObservable().subscribe(onNext: { next in
             self.currentItem.value = self.items[next]
-        })
-    }
-
-    func selectNextCurrency() {
-
+        }).addDisposableTo(disposeBag)
     }
 }

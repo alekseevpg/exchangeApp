@@ -16,8 +16,8 @@ class ExchangeViewController: UIViewController {
         return self.createAmountField()
     }()
     var viewModel = ExchangeViewModel()
-    var scroll1: CurrencyScrollView!
-    var scroll2: CurrencyScrollView!
+    var fromScrollView: CurrencyScrollView!
+    var toScrollView: CurrencyScrollView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +28,8 @@ class ExchangeViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        scroll1.updateFrame()
-        scroll2.updateFrame()
+        fromScrollView.updateFrame()
+        toScrollView.updateFrame()
         self.createAdditionalLayers()
     }
 
@@ -39,18 +39,18 @@ class ExchangeViewController: UIViewController {
         radialLayer.frame = view.bounds
 
         let shadedLayer = ShadedLayer()
-        scroll2.layer.addSublayer(shadedLayer)
-        shadedLayer.frame = scroll2.bounds
+        toScrollView.layer.addSublayer(shadedLayer)
+        shadedLayer.frame = toScrollView.bounds
     }
 
     private func bindModel() {
         fromAmountField.rx.text
                 .subscribe(onNext: { next in
-                    self.viewModel.fromAmountString.value = next ?? ""
+                    self.viewModel.fromAmountInput.value = next ?? ""
                 })
                 .addDisposableTo(disposeBag)
 
-        viewModel.fromAmount.asObservable()
+        viewModel.fromAmountOutput.asObservable()
                 .map({ item in
                     item.toString()
                 })
@@ -63,7 +63,7 @@ class ExchangeViewController: UIViewController {
                 })
                 .addDisposableTo(disposeBag)
 
-        viewModel.toAmount.asObservable()
+        viewModel.toAmountInput.asObservable()
                 .map({ item in
                     item.toString()
                 })
@@ -75,14 +75,14 @@ class ExchangeViewController: UIViewController {
         }).addDisposableTo(disposeBag)
 
         Observable.combineLatest(viewModel.sufficientFundsToExchange.asObservable(),
-                viewModel.toAmount.asObservable(),
-                viewModel.fromAmount.asObservable(),
+                viewModel.toAmountInput.asObservable(),
+                viewModel.fromAmountOutput.asObservable(),
                 viewModel.fromScrollViewModel.currentItem.asObservable(),
                 viewModel.toScrollViewModel.currentItem.asObservable()
         ).subscribe(onNext: { [unowned self] _ in
             self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
-                    self.viewModel.toAmount.value != nil &&
-                    self.viewModel.fromAmount.value != nil &&
+                    self.viewModel.toAmountInput.value != nil &&
+                    self.viewModel.fromAmountOutput.value != nil &&
                     self.viewModel.fromScrollViewModel.currentItem.value !=
                             self.viewModel.toScrollViewModel.currentItem.value
         }).addDisposableTo(disposeBag)
@@ -93,7 +93,7 @@ class ExchangeViewController: UIViewController {
     }
 
     private func setupConstraints() {
-        scroll1.snp.makeConstraints({ make in
+        fromScrollView.snp.makeConstraints({ make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.top.equalToSuperview()
@@ -101,21 +101,21 @@ class ExchangeViewController: UIViewController {
         })
 
         fromAmountField.snp.makeConstraints({ make in
-            make.leading.equalTo(scroll1.snp.centerX)
+            make.leading.equalTo(fromScrollView.snp.centerX)
             make.trailing.equalToSuperview().offset(-45)
-            make.centerY.equalTo(scroll1.snp.centerY)
+            make.centerY.equalTo(fromScrollView.snp.centerY)
         })
 
-        scroll2.snp.makeConstraints({ make in
+        toScrollView.snp.makeConstraints({ make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalTo(scroll1.snp.bottom)
+            make.top.equalTo(fromScrollView.snp.bottom)
             make.bottom.equalToSuperview()
         })
         toAmountField.snp.makeConstraints({ make in
-            make.leading.equalTo(scroll2.snp.centerX)
+            make.leading.equalTo(toScrollView.snp.centerX)
             make.trailing.equalToSuperview().offset(-45)
-            make.centerY.equalTo(scroll2.snp.centerY)
+            make.centerY.equalTo(toScrollView.snp.centerY)
         })
 
         exchangeBtn.snp.makeConstraints({ make in
@@ -134,28 +134,28 @@ class ExchangeViewController: UIViewController {
         keyboardHeight()
                 .observeOn(MainScheduler.instance)
                 .subscribe(onNext: { (newKeyboardHeight: CGFloat) in
-                    self.scroll1.snp.updateConstraints({ make in
+                    self.fromScrollView.snp.updateConstraints({ make in
                         make.bottom.equalTo(self.view.snp.centerY).offset(-newKeyboardHeight / 2)
                     })
-                    self.scroll2.snp.updateConstraints({ make in
+                    self.toScrollView.snp.updateConstraints({ make in
                         make.bottom.equalToSuperview().offset(-newKeyboardHeight)
                     })
-                    self.scroll1.updateFrame()
-                    self.scroll2.updateFrame()
+                    self.fromScrollView.updateFrame()
+                    self.toScrollView.updateFrame()
                 })
                 .addDisposableTo(disposeBag)
 
     }
 
     private func createViews() {
-        scroll1 = CurrencyScrollView(viewModel: viewModel.fromScrollViewModel)
-        view.addSubview(scroll1)
+        fromScrollView = CurrencyScrollView(viewModel: viewModel.fromScrollViewModel)
+        view.addSubview(fromScrollView)
 
         view.addSubview(fromAmountField)
         fromAmountField.adjustsFontSizeToFitWidth = true
 
-        scroll2 = CurrencyScrollView(viewModel: viewModel.toScrollViewModel)
-        view.addSubview(scroll2)
+        toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel)
+        view.addSubview(toScrollView)
 
         view.addSubview(toAmountField)
 
@@ -171,7 +171,7 @@ class ExchangeViewController: UIViewController {
     }
 
     private func createAmountField() -> UITextField {
-        var field = UITextField()
+        let field = UITextField()
         field.font = UIFont.systemFont(ofSize: 25)
         field.textColor = .white
         field.textAlignment = .right

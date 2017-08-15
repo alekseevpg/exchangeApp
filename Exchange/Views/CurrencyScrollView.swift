@@ -126,7 +126,7 @@ class CurrencyScrollView: UIView {
                 .addDisposableTo(disposeBag)
 
         viewModel.storage[type]!.asObservable()
-                .map({ "You have \(type.toSign())\($0)" })
+                .map({ "You have \(type.toSign())\($0.toString(2))" })
                 .bind(to: newLbl.amountLbl.rx.text)
                 .addDisposableTo(disposeBag)
         return newLbl
