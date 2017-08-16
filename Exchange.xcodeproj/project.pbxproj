@@ -22,7 +22,7 @@
 		32CB77F0D7AA19F0064D57C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CB72C31FC10E3F54934DF0 /* LaunchScreen.storyboard */; };
 		32CB786604EE5336E4CC9A94 /* ShadedLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7764AC0AED960524420D /* ShadedLayer.swift */; };
 		32CB7A5F0AA033DE19CE02A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32CB710265D63031C1AD1038 /* Assets.xcassets */; };
-		32CB7A7E74757988867598A7 /* CurrencyRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70654DB5BE7EFF12CA3A /* CurrencyRateService.swift */; };
+		32CB7A7E74757988867598A7 /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70654DB5BE7EFF12CA3A /* ExchangeRateService.swift */; };
 		32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7631BEFA5DE7827A806E /* KeyboardHeightObserver.swift */; };
 		32CB7BDACF2C2196EEC527F9 /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7A655D01A10279E5524E /* DoubleExtensions.swift */; };
 		32CB7CBBE135193647B051A4 /* RadialGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB732F2BFE9062F0DD6071 /* RadialGradientLayer.swift */; };
@@ -56,7 +56,7 @@
 		12617281344BBAA4E11187EE /* Pods_Exchange.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exchange.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EAF2A477DCED332482B7CD5 /* Pods-ExchangeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExchangeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ExchangeTests/Pods-ExchangeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		32CB7055E14DE34BC1C3C72A /* AccountStorageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountStorageTest.swift; sourceTree = "<group>"; };
-		32CB70654DB5BE7EFF12CA3A /* CurrencyRateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyRateService.swift; sourceTree = "<group>"; };
+		32CB70654DB5BE7EFF12CA3A /* ExchangeRateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeRateService.swift; sourceTree = "<group>"; };
 		32CB709304187483DD950555 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		32CB710265D63031C1AD1038 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 		32CB7204058EB8AEC7E84CFA /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				32CB70654DB5BE7EFF12CA3A /* CurrencyRateService.swift */,
+				32CB70654DB5BE7EFF12CA3A /* ExchangeRateService.swift */,
 				32CB7F8213DB273551536593 /* AccountStorage.swift */,
 			);
 			path = Logic;
@@ -174,6 +174,7 @@
 				32CB7C69880FDAD823CC8092 /* Info.plist */,
 				32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */,
 				32CB7055E14DE34BC1C3C72A /* AccountStorageTest.swift */,
+				32CB7F3A8AD6EADBE40DC076 /* FakeImplementation */,
 			);
 			path = ExchangeTests;
 			sourceTree = "<group>";
@@ -239,6 +240,13 @@
 				32CB74B00DA4B7AEE6B3F34F /* ExchangeViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		32CB7F3A8AD6EADBE40DC076 /* FakeImplementation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = FakeImplementation;
 			sourceTree = "<group>";
 		};
 		32CB7F5480E3AC4F2ACBD36F = {
@@ -562,7 +570,7 @@
 			files = (
 				32CB7FA19DC932604964ABF1 /* AppDelegate.swift in Sources */,
 				32CB7610467CE553731DF277 /* CurrencyType.swift in Sources */,
-				32CB7A7E74757988867598A7 /* CurrencyRateService.swift in Sources */,
+				32CB7A7E74757988867598A7 /* ExchangeRateService.swift in Sources */,
 				32CB77E88A4375FC3AA19CCD /* DIContainer.swift in Sources */,
 				32CB7042F505633D79557D1B /* ExchangeViewController.swift in Sources */,
 				32CB77D65542979C8DF5B5CC /* CurrencyScrollView.swift in Sources */,

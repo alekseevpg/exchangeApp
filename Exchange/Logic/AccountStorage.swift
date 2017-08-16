@@ -3,12 +3,12 @@ import RxCocoa
 import RxSwift
 
 class AccountStorage {
-    var exchangeRateService: CurrencyRateService
+    var exchangeRateService: ExchangeRateServiceProtocol
 
     private (set) var accounts: [CurrencyType: Variable<Double>] = [.eur: Variable<Double>(100),
                                                                     .gbp: Variable<Double>(100),
                                                                     .usd: Variable<Double>(100)]
-    init(_ exchangeRateService: CurrencyRateService) {
+    init(_ exchangeRateService: ExchangeRateServiceProtocol) {
         self.exchangeRateService = exchangeRateService
     }
 

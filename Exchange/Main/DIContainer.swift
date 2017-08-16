@@ -3,11 +3,11 @@ import Swinject
 
 struct DIContainer {
     private var instance = Container() { c in
-        c.register(CurrencyRateService.self) { _ in
-            CurrencyRateService()
+        c.register(ExchangeRateServiceProtocol.self) { _ in
+            ExchangeRateService()
         }.inObjectScope(.container)
         c.register(AccountStorage.self) { _ in
-            AccountStorage(c.resolve(CurrencyRateService.self)!)
+            AccountStorage(c.resolve(ExchangeRateServiceProtocol.self)!)
         }.inObjectScope(.container)
     }
 

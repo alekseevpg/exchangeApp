@@ -1,10 +1,11 @@
 import Foundation
+@testable import Exchange
 
 class AccountStorageTest: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        var storage = AccountStorage()
     }
 
     override func tearDown() {
@@ -12,9 +13,8 @@ class AccountStorageTest: XCTestCase {
         super.tearDown()
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func isEnoughFundsTest() {
+
     }
 
     func testPerformanceExample() {

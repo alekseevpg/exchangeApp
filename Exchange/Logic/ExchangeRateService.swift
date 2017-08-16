@@ -4,7 +4,11 @@ import SWXMLHash
 import RxSwift
 import RxCocoa
 
-class CurrencyRateService {
+protocol ExchangeRateServiceProtocol {
+    func getRate(from: CurrencyType, to: CurrencyType) -> Double?
+}
+
+class ExchangeRateService: ExchangeRateServiceProtocol {
     private let currencyAPIUrl = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
     private var disposeBag = DisposeBag()
 

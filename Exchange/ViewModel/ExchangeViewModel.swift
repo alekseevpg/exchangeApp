@@ -4,7 +4,7 @@ import RxCocoa
 
 class ExchangeViewModel {
     private var disposeBag = DisposeBag()
-    private var exchangeRateService = DIContainer.Instance.resolve(CurrencyRateService.self)!
+    private var exchangeRateService = DIContainer.Instance.resolve(ExchangeRateService.self)!
     private var accountsStorage = DIContainer.Instance.resolve(AccountStorage.self)!
 
     var fromScrollViewModel = CurrencyScrollViewModel()
