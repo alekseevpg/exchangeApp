@@ -11,6 +11,7 @@
 		32CB7147A54B21849BD61898 /* CurrencyScrollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB79DD5C75FE6A57B271C0 /* CurrencyScrollViewModel.swift */; };
 		32CB728C5A7685308039736F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */; };
 		32CB733F2FB81DC604B4B494 /* ExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */; };
+		32CB7358A94FD99D5A5C80CE /* AmountTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7C96C4A89AC53036E8E6 /* AmountTextField.swift */; };
 		32CB73F0E0E6BB4D671CF157 /* CurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB73179CF1832EB4F21684 /* CurrencyView.swift */; };
 		32CB75FBE3201CDE395C3D93 /* ExchangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB799C8B97640F8BA8C036 /* ExchangeUITests.swift */; };
 		32CB7610467CE553731DF277 /* CurrencyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7F24893B4986AFF51508 /* CurrencyType.swift */; };
@@ -74,6 +75,7 @@
 		32CB7B42451C1BCF495E15FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTests.swift; sourceTree = "<group>"; };
 		32CB7C69880FDAD823CC8092 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		32CB7C96C4A89AC53036E8E6 /* AmountTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountTextField.swift; sourceTree = "<group>"; };
 		32CB7F24893B4986AFF51508 /* CurrencyType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyType.swift; sourceTree = "<group>"; };
 		32CB7F36F3A54B76CCFB5063 /* ExchangeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExchangeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32CB7F5210EE3C960F88B980 /* DIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				32CB7338CC4340CB0E82A2AB /* ExchangeViewController.swift */,
 				32CB73532FE0A81CAEB82B26 /* CurrencyScrollView.swift */,
 				32CB73179CF1832EB4F21684 /* CurrencyView.swift */,
+				32CB7C96C4A89AC53036E8E6 /* AmountTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				32CB786604EE5336E4CC9A94 /* ShadedLayer.swift in Sources */,
 				32CB7CBBE135193647B051A4 /* RadialGradientLayer.swift in Sources */,
 				32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */,
+				32CB7358A94FD99D5A5C80CE /* AmountTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

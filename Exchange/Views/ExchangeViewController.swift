@@ -10,12 +10,8 @@ class ExchangeViewController: UIViewController {
     lazy var exchangeBtn = UIButton()
     lazy var exchangeRateLbl = UILabel()
     lazy var exchangeRateRevertedLbl = UILabel()
-    lazy var toAmountField: UITextField = {
-        return self.createAmountField()
-    }()
-    lazy var fromAmountField: UITextField = {
-        return self.createAmountField()
-    }()
+    lazy var fromAmountField = AmountTextField(prefix: "-")
+    lazy var toAmountField = AmountTextField(prefix: "+")
 
     var viewModel = ExchangeViewModel()
     var fromScrollView: CurrencyScrollView!
@@ -30,8 +26,8 @@ class ExchangeViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fromScrollView.updateFrame()
-        toScrollView.updateFrame()
+        self.fromScrollView.updateFrame()
+        self.toScrollView.updateFrame()
         self.createAdditionalLayers()
     }
 
@@ -41,7 +37,6 @@ class ExchangeViewController: UIViewController {
 
         view.addSubview(fromAmountField)
         fromAmountField.becomeFirstResponder()
-        fromAmountField.adjustsFontSizeToFitWidth = true
 
         toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel, shaded: true)
         view.addSubview(toScrollView)
@@ -79,13 +74,12 @@ class ExchangeViewController: UIViewController {
         })
 
         fromAmountField.snp.makeConstraints({ make in
-            make.leading.greaterThanOrEqualTo(fromScrollView.snp.centerX)
+            make.width.equalTo(20)
             make.trailing.equalToSuperview().offset(-45)
-            make.width.greaterThanOrEqualTo(20)
             make.centerY.equalTo(fromScrollView.snp.centerY)
         })
         exchangeRateLbl.snp.makeConstraints({ make in
-            make.leading.equalTo(fromAmountField.snp.leading)
+            make.leading.equalTo(view.snp.centerX)
             make.trailing.equalTo(fromAmountField.snp.trailing)
             make.top.equalTo(fromAmountField.snp.bottom).offset(20)
         })
@@ -97,12 +91,13 @@ class ExchangeViewController: UIViewController {
             make.bottom.equalToSuperview()
         })
         toAmountField.snp.makeConstraints({ make in
-            make.leading.equalTo(toScrollView.snp.centerX)
+            make.width.equalTo(20)
             make.trailing.equalToSuperview().offset(-45)
             make.centerY.equalTo(toScrollView.snp.centerY)
         })
+
         exchangeRateRevertedLbl.snp.makeConstraints({ make in
-            make.leading.equalTo(toAmountField.snp.leading)
+            make.leading.equalTo(view.snp.centerX)
             make.trailing.equalTo(toAmountField.snp.trailing)
             make.top.equalTo(toAmountField.snp.bottom).offset(20)
         })
@@ -121,11 +116,14 @@ class ExchangeViewController: UIViewController {
                 })
                 .addDisposableTo(disposeBag)
 
-        viewModel.fromAmountOutput.asObservable()
+        viewModel.fromAmountOutput.asDriver()
                 .map({ item in
                     item.toString()
                 })
-                .bind(to: fromAmountField.rx.text)
+                .drive(onNext: { next in
+                    self.fromAmountField.text = next
+                    self.updateAmountFieldsWidth()
+                })
                 .addDisposableTo(disposeBag)
 
         toAmountField.rx.text
@@ -134,11 +132,14 @@ class ExchangeViewController: UIViewController {
                 })
                 .addDisposableTo(disposeBag)
 
-        viewModel.toAmountOutput.asObservable()
+        viewModel.toAmountOutput.asDriver()
                 .map({ item in
                     item.toString()
                 })
-                .bind(to: toAmountField.rx.text)
+                .drive(onNext: { next in
+                    self.toAmountField.text = next
+                    self.updateAmountFieldsWidth()
+                })
                 .addDisposableTo(disposeBag)
 
         exchangeBtn.rx.tap.subscribe(onNext: { _ in
@@ -182,33 +183,17 @@ class ExchangeViewController: UIViewController {
                 .addDisposableTo(disposeBag)
     }
 
-    private func createAmountField() -> UITextField {
-        let field = UITextField()
-        field.placeholder = "0"
-        field.font = UIFont.systemFont(ofSize: 25)
-        field.textColor = .white
-        field.textAlignment = .right
-        field.keyboardType = .numberPad
-        field.adjustsFontSizeToFitWidth = true
-        field.delegate = self
-        return field
-    }
-}
+    private func updateAmountFieldsWidth() {
+        var amount = fromAmountField.text == nil || fromAmountField.text! == "" ? "0" : fromAmountField.text!
+        var width = amount.size(attributes: [NSFontAttributeName: fromAmountField.font]).width
+        fromAmountField.snp.updateConstraints({ make in
+            make.width.equalTo(width + 10)
+        })
 
-extension ExchangeViewController: UITextFieldDelegate {
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
-                          replacementString string: String) -> Bool {
-        guard let text = textField.text else {
-            return true
-        }
-        var result = true
-        if string.characters.count > 0 {
-            let disallowedCharacterSet = NSCharacterSet(charactersIn: "0123456789.-").inverted
-            let replacementStringIsLegal = string.rangeOfCharacter(from: disallowedCharacterSet) == nil
-            result = replacementStringIsLegal
-        }
-        let newLength = text.characters.count + string.characters.count - range.length
-
-        return result && (newLength < text.characters.count || newLength <= 7)
+        amount = toAmountField.text == nil || toAmountField.text! == "" ? "0" : toAmountField.text!
+        width = amount.size(attributes: [NSFontAttributeName: toAmountField.font]).width
+        toAmountField.snp.updateConstraints({ make in
+            make.width.equalTo(width + 10)
+        })
     }
 }
