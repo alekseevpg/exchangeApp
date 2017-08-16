@@ -11,13 +11,17 @@ class CurrencyScrollView: UIView {
     lazy var scrollView = UIScrollView()
     lazy var pageControl = UIPageControl()
     lazy var contentView = UIView()
+    private lazy var shadedLayer = ShadedLayer()
+
+    private var isShaded: Bool = false
 
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
-    init(viewModel: CurrencyScrollViewModel) {
+    init(viewModel: CurrencyScrollViewModel, shaded: Bool = false) {
         super.init(frame: .zero)
+        self.isShaded = shaded
         self.viewModel = viewModel
         self.createViews()
         self.setupConstraints()
@@ -71,6 +75,10 @@ class CurrencyScrollView: UIView {
             firstItem = newLbl
         }
         let lastLbl = createCurrencyView(type: viewModel.items.first!, leading: firstItem.snp.trailing)
+
+        if isShaded {
+            self.layer.addSublayer(shadedLayer)
+        }
     }
 
     private func setupConstraints() {
@@ -95,6 +103,9 @@ class CurrencyScrollView: UIView {
     }
 
     func updateFrame() {
+        if isShaded {
+            shadedLayer.frame = self.bounds
+        }
         scrollView.contentSize = CGSize(width: contentView.frame.width, height: frame.height)
         scrollView.scrollRectToVisible(CGRect(x: frame.width * CGFloat(viewModel.currentIndex.value + 1), y: 0,
                 width: frame.width, height: frame.height), animated: false)

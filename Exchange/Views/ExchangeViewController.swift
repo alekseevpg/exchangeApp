@@ -43,7 +43,7 @@ class ExchangeViewController: UIViewController {
         fromAmountField.becomeFirstResponder()
         fromAmountField.adjustsFontSizeToFitWidth = true
 
-        toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel)
+        toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel, shaded: true)
         view.addSubview(toScrollView)
         view.addSubview(toAmountField)
 
@@ -112,10 +112,6 @@ class ExchangeViewController: UIViewController {
         let radialLayer = RadialGradientLayer()
         self.view.layer.insertSublayer(radialLayer, at: 0)
         radialLayer.frame = view.bounds
-
-        let shadedLayer = ShadedLayer()
-        toScrollView.layer.addSublayer(shadedLayer)
-        shadedLayer.frame = toScrollView.bounds
     }
 
     private func bindModel() {
@@ -200,7 +196,6 @@ class ExchangeViewController: UIViewController {
 }
 
 extension ExchangeViewController: UITextFieldDelegate {
-
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
                           replacementString string: String) -> Bool {
         guard let text = textField.text else {
