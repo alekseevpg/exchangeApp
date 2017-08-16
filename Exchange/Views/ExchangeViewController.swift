@@ -121,9 +121,7 @@ class ExchangeViewController: UIViewController {
     private func bindModel() {
         fromAmountField.rx.text
                 .subscribe(onNext: { (next: String?) in
-                    if var value = next, value.characters.count > 0 {
-                        self.viewModel.fromAmountInput.value = value
-                    }
+                    self.viewModel.fromAmountInput.value = next ?? ""
                 })
                 .addDisposableTo(disposeBag)
 
@@ -136,9 +134,7 @@ class ExchangeViewController: UIViewController {
 
         toAmountField.rx.text
                 .subscribe(onNext: { (next: String?) in
-                    if var value = next, value.characters.count > 0 {
-                        self.viewModel.toFieldUpdate(value)
-                    }
+                    self.viewModel.toFieldUpdate(next ?? "")
                 })
                 .addDisposableTo(disposeBag)
 

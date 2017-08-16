@@ -53,8 +53,9 @@ class ExchangeViewModel {
         exchangeRateReverted.value = "1 \(to.toSign()) = \(rateReverted.toString()) \(from.toSign())"
     }
 
-    func toFieldUpdate(_ str: String?) {
-        guard let amount = Float(str ?? "") else {
+    func toFieldUpdate(_ input: String) {
+        guard let amount = Float(input) else {
+            fromAmountOutput.value = nil
             return
         }
         let to = toScrollViewModel.currentItem.value
@@ -67,6 +68,7 @@ class ExchangeViewModel {
 
     private func fromFieldUpdate() {
         guard let amount = Float(fromAmountInput.value) else {
+            toAmountOutput.value = nil
             return
         }
         let to = toScrollViewModel.currentItem.value
