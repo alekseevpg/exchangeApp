@@ -23,7 +23,7 @@
 		32CB7A5F0AA033DE19CE02A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32CB710265D63031C1AD1038 /* Assets.xcassets */; };
 		32CB7A7E74757988867598A7 /* CurrencyRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70654DB5BE7EFF12CA3A /* CurrencyRateService.swift */; };
 		32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7631BEFA5DE7827A806E /* KeyboardHeightObserver.swift */; };
-		32CB7BDACF2C2196EEC527F9 /* FloatExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7A655D01A10279E5524E /* FloatExtensions.swift */; };
+		32CB7BDACF2C2196EEC527F9 /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7A655D01A10279E5524E /* DoubleExtensions.swift */; };
 		32CB7CBBE135193647B051A4 /* RadialGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB732F2BFE9062F0DD6071 /* RadialGradientLayer.swift */; };
 		32CB7E1A1D6ECC7C0A3EF447 /* ExchangeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB74B00DA4B7AEE6B3F34F /* ExchangeViewModel.swift */; };
 		32CB7FA19DC932604964ABF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7B42451C1BCF495E15FB /* AppDelegate.swift */; };
@@ -71,7 +71,7 @@
 		32CB779C1B1F88C9E8910B01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32CB799C8B97640F8BA8C036 /* ExchangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeUITests.swift; sourceTree = "<group>"; };
 		32CB79DD5C75FE6A57B271C0 /* CurrencyScrollViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyScrollViewModel.swift; sourceTree = "<group>"; };
-		32CB7A655D01A10279E5524E /* FloatExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatExtensions.swift; sourceTree = "<group>"; };
+		32CB7A655D01A10279E5524E /* DoubleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleExtensions.swift; sourceTree = "<group>"; };
 		32CB7B42451C1BCF495E15FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTests.swift; sourceTree = "<group>"; };
 		32CB7C69880FDAD823CC8092 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
@@ -167,7 +167,7 @@
 		32CB74C36549CFC427D47950 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				32CB7A655D01A10279E5524E /* FloatExtensions.swift */,
+				32CB7A655D01A10279E5524E /* DoubleExtensions.swift */,
 				32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */,
 				32CB74E8E30610EF62B13D2F /* UILabelReactiveExtensions.swift */,
 			);
@@ -574,7 +574,7 @@
 				32CB73F0E0E6BB4D671CF157 /* CurrencyView.swift in Sources */,
 				32CB7147A54B21849BD61898 /* CurrencyScrollViewModel.swift in Sources */,
 				32CB7E1A1D6ECC7C0A3EF447 /* ExchangeViewModel.swift in Sources */,
-				32CB7BDACF2C2196EEC527F9 /* FloatExtensions.swift in Sources */,
+				32CB7BDACF2C2196EEC527F9 /* DoubleExtensions.swift in Sources */,
 				32CB728C5A7685308039736F /* UIColorExtensions.swift in Sources */,
 				32CB7617F4FA43AE9BD966D7 /* UILabelReactiveExtensions.swift in Sources */,
 				32CB786604EE5336E4CC9A94 /* ShadedLayer.swift in Sources */,
