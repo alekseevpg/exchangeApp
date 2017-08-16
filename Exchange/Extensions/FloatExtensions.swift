@@ -1,6 +1,6 @@
 import Foundation
 
-extension Float {
+extension Double {
     func toString(_ fractionalDigits: Int = 2) -> String {
         let formatter = NumberFormatter()
         formatter.minimumIntegerDigits = 1
@@ -10,9 +10,9 @@ extension Float {
     }
 }
 
-extension Optional where Wrapped == Float {
+extension Optional where Wrapped == Double {
     func toString() -> String {
-        guard var value = self else {
+        guard let value = self else {
             return ""
         }
         let formatter = NumberFormatter()

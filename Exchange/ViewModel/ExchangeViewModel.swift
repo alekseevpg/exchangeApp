@@ -9,9 +9,9 @@ class ExchangeViewModel {
     var toScrollViewModel = CurrencyScrollViewModel()
 
     var fromAmountInput: Variable<String> = Variable<String>("")
-    var fromAmountOutput: Variable<Float?> = Variable<Float?>(nil)
+    var fromAmountOutput: Variable<Double?> = Variable<Double?>(nil)
 
-    var toAmountOutput: Variable<Float?> = Variable<Float?>(nil)
+    var toAmountOutput: Variable<Double?> = Variable<Double?>(nil)
 
     var exchangeRate: Variable<String> = Variable<String>("")
     var exchangeRateReverted: Variable<String> = Variable<String>("")
@@ -48,7 +48,7 @@ class ExchangeViewModel {
     }
 
     func toFieldUpdate(_ input: String) {
-        guard let amount = Float(input) else {
+        guard let amount = Double(input) else {
             fromAmountOutput.value = nil
             return
         }
@@ -61,7 +61,7 @@ class ExchangeViewModel {
     }
 
     private func fromFieldUpdate() {
-        guard let amount = Float(fromAmountInput.value) else {
+        guard let amount = Double(fromAmountInput.value) else {
             toAmountOutput.value = nil
             return
         }
@@ -81,7 +81,7 @@ class ExchangeViewModel {
         fromScrollViewModel.sufficientFundsToExchange.value = isEnough
     }
 
-    private func convert(from: CurrencyType, to: CurrencyType, amount: Float) -> Float? {
+    private func convert(from: CurrencyType, to: CurrencyType, amount: Double) -> Double? {
         guard let rate = exchangeRateService.getRate(from: from, to: to) else {
             return nil
         }

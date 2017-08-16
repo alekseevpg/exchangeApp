@@ -8,11 +8,11 @@ class CurrencyRateService {
     private let currencyAPIUrl = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
     var disposeBag = DisposeBag()
 
-    private(set) var currenciesStorage: Variable<[CurrencyType: Float]> = Variable<[CurrencyType: Float]>([.eur: 100,
+    private(set) var currenciesStorage: Variable<[CurrencyType: Double]> = Variable<[CurrencyType: Double]>([.eur: 100,
                                                                                                            .gbp: 100,
                                                                                                            .usd: 100])
 
-    private(set) var currenciesRates: Variable<[CurrencyType: Float]> = Variable<[CurrencyType: Float]>([.eur: 1,
+    private(set) var currenciesRates: Variable<[CurrencyType: Double]> = Variable<[CurrencyType: Double]>([.eur: 1,
                                                                                                          .gbp: 0.90303,
                                                                                                          .usd: 1.1732])
 
@@ -26,11 +26,11 @@ class CurrencyRateService {
         }).addDisposableTo(disposeBag)
     }
 
-    func isEnoughFunds(from: CurrencyType, amount: Float) -> Bool {
+    func isEnoughFunds(from: CurrencyType, amount: Double) -> Bool {
         return amount <= currenciesStorage.value[from]!
     }
 
-    func exchange(from: CurrencyType, to: CurrencyType, amount: Float) {
+    func exchange(from: CurrencyType, to: CurrencyType, amount: Double) {
         guard let rate = getRate(from: from, to: to) else {
             return
         }
@@ -39,7 +39,7 @@ class CurrencyRateService {
         currenciesStorage.value[to] = currenciesStorage.value[to]! + toAmount
     }
 
-    func getRate(from: CurrencyType, to: CurrencyType) -> Float? {
+    func getRate(from: CurrencyType, to: CurrencyType) -> Double? {
         guard let rateTo = currenciesRates.value[to], let rateFrom = currenciesRates.value[from] else {
             return nil
         }
@@ -51,7 +51,7 @@ class CurrencyRateService {
         }
     }
 
-    private func updateRates() -> Observable<(CurrencyType, Float)> {
+    private func updateRates() -> Observable<(CurrencyType, Double)> {
         return Observable.create { observer in
             Alamofire.request(self.currencyAPIUrl, method: .get)
                     .responseString { response in
@@ -64,7 +64,7 @@ class CurrencyRateService {
                             guard let currencyName = item.element?.attribute(by: "currency")?.text,
                                   let type = CurrencyType(rawValue: currencyName),
                                   let rate = item.element?.attribute(by: "rate")?.text,
-                                  let rate2 = Float(rate) else {
+                                  let rate2 = Double(rate) else {
                                 return
                             }
                             observer.onNext(type, rate2)

@@ -17,7 +17,7 @@ class ShadedLayer: QuartzCore.CALayer {
 
     override func draw(in ctx: CGContext) {
         ctx.saveGState()
-        var path = UIBezierPath()
+        let path = UIBezierPath()
         path.move(to: CGPoint(x: 0, y: 0))
         path.addLine(to: CGPoint(x: frame.width / 2 - 30, y: 0))
         path.addLine(to: CGPoint(x: frame.width / 2 - 3, y: 28))

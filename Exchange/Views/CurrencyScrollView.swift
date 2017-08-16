@@ -74,7 +74,7 @@ class CurrencyScrollView: UIView {
             let newLbl = createCurrencyView(type: item, leading: firstItem.snp.trailing)
             firstItem = newLbl
         }
-        let lastLbl = createCurrencyView(type: viewModel.items.first!, leading: firstItem.snp.trailing)
+        _ = createCurrencyView(type: viewModel.items.first!, leading: firstItem.snp.trailing)
 
         if isShaded {
             self.layer.addSublayer(shadedLayer)
