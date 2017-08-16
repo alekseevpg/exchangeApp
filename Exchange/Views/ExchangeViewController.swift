@@ -153,11 +153,14 @@ class ExchangeViewController: UIViewController {
                 viewModel.fromScrollViewModel.currentItem.asObservable(),
                 viewModel.toScrollViewModel.currentItem.asObservable()
         ).subscribe(onNext: { _ in
+            var amountsNotEmpty = self.viewModel.toAmountOutput.value != nil &&
+                    self.viewModel.fromAmountOutput.value != nil
             self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
-                    self.viewModel.toAmountOutput.value != nil &&
-                    self.viewModel.fromAmountOutput.value != nil &&
+                    amountsNotEmpty &&
                     self.viewModel.fromScrollViewModel.currentItem.value !=
                             self.viewModel.toScrollViewModel.currentItem.value
+            self.fromAmountField.changePrefixVisibility(hidden: !amountsNotEmpty)
+            self.toAmountField.changePrefixVisibility(hidden: !amountsNotEmpty)
         }).addDisposableTo(disposeBag)
 
         viewModel.exchangeRate.asObservable()
@@ -185,13 +188,15 @@ class ExchangeViewController: UIViewController {
 
     private func updateAmountFieldsWidth() {
         var amount = fromAmountField.text == nil || fromAmountField.text! == "" ? "0" : fromAmountField.text!
-        var width = amount.size(attributes: [NSFontAttributeName: fromAmountField.font]).width
+        var width = amount.size(attributes: [NSFontAttributeName: fromAmountField.font
+                ?? UIFont.systemFont(ofSize: 25)]).width
         fromAmountField.snp.updateConstraints({ make in
             make.width.equalTo(width + 10)
         })
 
         amount = toAmountField.text == nil || toAmountField.text! == "" ? "0" : toAmountField.text!
-        width = amount.size(attributes: [NSFontAttributeName: toAmountField.font]).width
+        width = amount.size(attributes: [NSFontAttributeName: toAmountField.font
+                ?? UIFont.systemFont(ofSize: 25)]).width
         toAmountField.snp.updateConstraints({ make in
             make.width.equalTo(width + 10)
         })

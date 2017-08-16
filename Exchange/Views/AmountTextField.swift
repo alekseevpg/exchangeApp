@@ -7,13 +7,19 @@ import RxCocoa
 class AmountTextField: UITextField {
 
     lazy var prefixLbl = UILabel()
+    var prefix = ""
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
     init(prefix: String) {
         super.init(frame: .zero)
-        self.backgroundColor = .red
+        self.prefix = prefix
+        self.setupViews()
+        self.setupConstraints()
+    }
+
+    private func setupViews() {
         self.placeholder = "0"
         self.font = UIFont.systemFont(ofSize: 25)
         self.textColor = .white
@@ -23,16 +29,21 @@ class AmountTextField: UITextField {
         self.adjustsFontSizeToFitWidth = false
         self.adjustsFontForContentSizeCategory = true
 
-        prefixLbl.backgroundColor = .green
         prefixLbl.textColor = .white
         prefixLbl.text = prefix
         self.addSubview(prefixLbl)
+    }
 
+    private func setupConstraints() {
         prefixLbl.snp.makeConstraints({ make in
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.trailing.equalTo(snp.leading)
+            make.trailing.equalTo(snp.leading).offset(5)
         })
+    }
+
+    func changePrefixVisibility(hidden: Bool) {
+        self.prefixLbl.isHidden = hidden
     }
 }
 
