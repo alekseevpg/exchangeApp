@@ -11,16 +11,16 @@ class CurrencyScrollViewModel {
     var currentIndex: Variable<Int> = Variable<Int>(0)
     var currentItem: Variable<CurrencyType> = Variable<CurrencyType>(.eur)
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
-    var storage: [CurrencyType: Variable<Double>] = [.eur: Variable<Double>(0),
-                                                     .gbp: Variable<Double>(0),
-                                                     .usd: Variable<Double>(0)]
+    var accounts: [CurrencyType: Variable<Double>] = [.eur: Variable<Double>(0),
+                                                      .gbp: Variable<Double>(0),
+                                                      .usd: Variable<Double>(0)]
 
     init() {
         accountsStorage.currenciesStorage.asObservable()
                 .subscribe(onNext: { rates in
                     for rate in rates {
-                        if (self.storage[rate.key] != nil) {
-                            self.storage[rate.key]!.value = rate.value
+                        if (self.accounts[rate.key] != nil) {
+                            self.accounts[rate.key]!.value = rate.value
                         }
                     }
                 }).addDisposableTo(disposeBag)

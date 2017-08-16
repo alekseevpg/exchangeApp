@@ -127,7 +127,7 @@ class CurrencyScrollView: UIView {
                 .bind(to: newLbl.amountLbl.rx.textColor)
                 .addDisposableTo(disposeBag)
 
-        viewModel.storage[type]!.asObservable()
+        viewModel.accounts[type]!.asObservable()
                 .map({ "You have \(type.toSign())\($0.toString())" })
                 .bind(to: newLbl.amountLbl.rx.text)
                 .addDisposableTo(disposeBag)
