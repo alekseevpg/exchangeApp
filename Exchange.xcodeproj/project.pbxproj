@@ -11,8 +11,6 @@
 		32CB7147A54B21849BD61898 /* CurrencyScrollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB79DD5C75FE6A57B271C0 /* CurrencyScrollViewModel.swift */; };
 		32CB728C5A7685308039736F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */; };
 		32CB733F2FB81DC604B4B494 /* ExchangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */; };
-		32CB7377527D1ACEAF41B46F /* ShadedLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB73812E9FC166220574F5 /* ShadedLayer.swift */; };
-		32CB73BFD972BBAFF0BB10EF /* RadialGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7EF7465102B0D627A503 /* RadialGradientLayer.swift */; };
 		32CB73F0E0E6BB4D671CF157 /* CurrencyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB73179CF1832EB4F21684 /* CurrencyView.swift */; };
 		32CB75FBE3201CDE395C3D93 /* ExchangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB799C8B97640F8BA8C036 /* ExchangeUITests.swift */; };
 		32CB7610467CE553731DF277 /* CurrencyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7F24893B4986AFF51508 /* CurrencyType.swift */; };
@@ -20,10 +18,12 @@
 		32CB77D65542979C8DF5B5CC /* CurrencyScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB73532FE0A81CAEB82B26 /* CurrencyScrollView.swift */; };
 		32CB77E88A4375FC3AA19CCD /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7F5210EE3C960F88B980 /* DIContainer.swift */; };
 		32CB77F0D7AA19F0064D57C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CB72C31FC10E3F54934DF0 /* LaunchScreen.storyboard */; };
-		32CB7940354F4BED20219553 /* KeyboardHeightObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB77461951D0B68CCC0BA0 /* KeyboardHeightObserver.swift */; };
+		32CB786604EE5336E4CC9A94 /* ShadedLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7764AC0AED960524420D /* ShadedLayer.swift */; };
 		32CB7A5F0AA033DE19CE02A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32CB710265D63031C1AD1038 /* Assets.xcassets */; };
 		32CB7A7E74757988867598A7 /* CurrencyRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70654DB5BE7EFF12CA3A /* CurrencyRateService.swift */; };
+		32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7631BEFA5DE7827A806E /* KeyboardHeightObserver.swift */; };
 		32CB7BDACF2C2196EEC527F9 /* FloatExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7A655D01A10279E5524E /* FloatExtensions.swift */; };
+		32CB7CBBE135193647B051A4 /* RadialGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB732F2BFE9062F0DD6071 /* RadialGradientLayer.swift */; };
 		32CB7E1A1D6ECC7C0A3EF447 /* ExchangeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB74B00DA4B7AEE6B3F34F /* ExchangeViewModel.swift */; };
 		32CB7FA19DC932604964ABF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7B42451C1BCF495E15FB /* AppDelegate.swift */; };
 		40C3BB629F863C0315CD569C /* Pods_Exchange.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12617281344BBAA4E11187EE /* Pods_Exchange.framework */; };
@@ -57,15 +57,16 @@
 		32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		32CB710265D63031C1AD1038 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		32CB73179CF1832EB4F21684 /* CurrencyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyView.swift; sourceTree = "<group>"; };
+		32CB732F2BFE9062F0DD6071 /* RadialGradientLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadialGradientLayer.swift; sourceTree = "<group>"; };
 		32CB7338CC4340CB0E82A2AB /* ExchangeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeViewController.swift; sourceTree = "<group>"; };
 		32CB73532FE0A81CAEB82B26 /* CurrencyScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyScrollView.swift; sourceTree = "<group>"; };
-		32CB73812E9FC166220574F5 /* ShadedLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadedLayer.swift; sourceTree = "<group>"; };
 		32CB74B00DA4B7AEE6B3F34F /* ExchangeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeViewModel.swift; sourceTree = "<group>"; };
 		32CB74E8E30610EF62B13D2F /* UILabelReactiveExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelReactiveExtensions.swift; sourceTree = "<group>"; };
 		32CB7520D530572BE43B8F94 /* Exchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Exchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		32CB7631BEFA5DE7827A806E /* KeyboardHeightObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHeightObserver.swift; sourceTree = "<group>"; };
 		32CB76BF5D3C6B88D8821789 /* ExchangeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExchangeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32CB76F775F6AE741AC896DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		32CB77461951D0B68CCC0BA0 /* KeyboardHeightObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHeightObserver.swift; sourceTree = "<group>"; };
+		32CB7764AC0AED960524420D /* ShadedLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadedLayer.swift; sourceTree = "<group>"; };
 		32CB779C1B1F88C9E8910B01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32CB799C8B97640F8BA8C036 /* ExchangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeUITests.swift; sourceTree = "<group>"; };
 		32CB79DD5C75FE6A57B271C0 /* CurrencyScrollViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyScrollViewModel.swift; sourceTree = "<group>"; };
@@ -73,7 +74,6 @@
 		32CB7B42451C1BCF495E15FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeTests.swift; sourceTree = "<group>"; };
 		32CB7C69880FDAD823CC8092 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
-		32CB7EF7465102B0D627A503 /* RadialGradientLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadialGradientLayer.swift; sourceTree = "<group>"; };
 		32CB7F24893B4986AFF51508 /* CurrencyType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyType.swift; sourceTree = "<group>"; };
 		32CB7F36F3A54B76CCFB5063 /* ExchangeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExchangeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32CB7F5210EE3C960F88B980 /* DIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
@@ -148,6 +148,8 @@
 				32CB7BAF7E71DC620ED13105 /* Views */,
 				32CB7E52EC40CB220DFCACF4 /* ViewModel */,
 				32CB74C36549CFC427D47950 /* Extensions */,
+				32CB7A1DBA0B20D0CE03066B /* Layers */,
+				32CB7C1ADA3BC3BA7F8BDC4C /* Helpers */,
 			);
 			path = Exchange;
 			sourceTree = "<group>";
@@ -164,11 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				32CB7A655D01A10279E5524E /* FloatExtensions.swift */,
-				32CB77461951D0B68CCC0BA0 /* KeyboardHeightObserver.swift */,
-				32CB7EF7465102B0D627A503 /* RadialGradientLayer.swift */,
 				32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */,
 				32CB74E8E30610EF62B13D2F /* UILabelReactiveExtensions.swift */,
-				32CB73812E9FC166220574F5 /* ShadedLayer.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -200,6 +199,15 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		32CB7A1DBA0B20D0CE03066B /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				32CB7764AC0AED960524420D /* ShadedLayer.swift */,
+				32CB732F2BFE9062F0DD6071 /* RadialGradientLayer.swift */,
+			);
+			path = Layers;
+			sourceTree = "<group>";
+		};
 		32CB7BAF7E71DC620ED13105 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +216,14 @@
 				32CB73179CF1832EB4F21684 /* CurrencyView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		32CB7C1ADA3BC3BA7F8BDC4C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				32CB7631BEFA5DE7827A806E /* KeyboardHeightObserver.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		32CB7D428C29D4AB0DDCEDB8 /* Model */ = {
@@ -556,11 +572,11 @@
 				32CB7147A54B21849BD61898 /* CurrencyScrollViewModel.swift in Sources */,
 				32CB7E1A1D6ECC7C0A3EF447 /* ExchangeViewModel.swift in Sources */,
 				32CB7BDACF2C2196EEC527F9 /* FloatExtensions.swift in Sources */,
-				32CB7940354F4BED20219553 /* KeyboardHeightObserver.swift in Sources */,
-				32CB73BFD972BBAFF0BB10EF /* RadialGradientLayer.swift in Sources */,
 				32CB728C5A7685308039736F /* UIColorExtensions.swift in Sources */,
 				32CB7617F4FA43AE9BD966D7 /* UILabelReactiveExtensions.swift in Sources */,
-				32CB7377527D1ACEAF41B46F /* ShadedLayer.swift in Sources */,
+				32CB786604EE5336E4CC9A94 /* ShadedLayer.swift in Sources */,
+				32CB7CBBE135193647B051A4 /* RadialGradientLayer.swift in Sources */,
+				32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
