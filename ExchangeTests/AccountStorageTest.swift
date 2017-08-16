@@ -1,7 +1,6 @@
-import XCTest
-@testable import Exchange
+import Foundation
 
-class ExchangeTests: XCTestCase {
+class AccountStorageTest: XCTestCase {
 
     override func setUp() {
         super.setUp()

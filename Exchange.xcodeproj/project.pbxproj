@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		32CB7042F505633D79557D1B /* ExchangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7338CC4340CB0E82A2AB /* ExchangeViewController.swift */; };
+		32CB7091BBCCE51D74214280 /* AccountStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7055E14DE34BC1C3C72A /* AccountStorageTest.swift */; };
 		32CB7147A54B21849BD61898 /* CurrencyScrollViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB79DD5C75FE6A57B271C0 /* CurrencyScrollViewModel.swift */; };
 		32CB71B10744D81EF237AB2C /* AccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7F8213DB273551536593 /* AccountStorage.swift */; };
 		32CB728C5A7685308039736F /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */; };
@@ -26,6 +27,7 @@
 		32CB7BDACF2C2196EEC527F9 /* DoubleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7A655D01A10279E5524E /* DoubleExtensions.swift */; };
 		32CB7CBBE135193647B051A4 /* RadialGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB732F2BFE9062F0DD6071 /* RadialGradientLayer.swift */; };
 		32CB7E1A1D6ECC7C0A3EF447 /* ExchangeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB74B00DA4B7AEE6B3F34F /* ExchangeViewModel.swift */; };
+		32CB7E65AAFFB9A1DCFA918C /* AccountStorageTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7055E14DE34BC1C3C72A /* AccountStorageTest.swift */; };
 		32CB7FA19DC932604964ABF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7B42451C1BCF495E15FB /* AppDelegate.swift */; };
 		40C3BB629F863C0315CD569C /* Pods_Exchange.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12617281344BBAA4E11187EE /* Pods_Exchange.framework */; };
 		421A6A9811DFFF85CB1B3AC4 /* Pods_ExchangeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E308728E78625FB93585C299 /* Pods_ExchangeUITests.framework */; };
@@ -53,6 +55,7 @@
 		0E498D6DCDD68D3722E5721B /* Pods-ExchangeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExchangeUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExchangeUITests/Pods-ExchangeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		12617281344BBAA4E11187EE /* Pods_Exchange.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exchange.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EAF2A477DCED332482B7CD5 /* Pods-ExchangeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExchangeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ExchangeTests/Pods-ExchangeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		32CB7055E14DE34BC1C3C72A /* AccountStorageTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountStorageTest.swift; sourceTree = "<group>"; };
 		32CB70654DB5BE7EFF12CA3A /* CurrencyRateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyRateService.swift; sourceTree = "<group>"; };
 		32CB709304187483DD950555 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32CB70DFB33D0E8978F65D3A /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
@@ -170,6 +173,7 @@
 			children = (
 				32CB7C69880FDAD823CC8092 /* Info.plist */,
 				32CB7C10DC0C8DF1CAFD6B7E /* ExchangeTests.swift */,
+				32CB7055E14DE34BC1C3C72A /* AccountStorageTest.swift */,
 			);
 			path = ExchangeTests;
 			sourceTree = "<group>";
@@ -548,6 +552,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				32CB733F2FB81DC604B4B494 /* ExchangeTests.swift in Sources */,
+				32CB7091BBCCE51D74214280 /* AccountStorageTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,6 +577,7 @@
 				32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */,
 				32CB7358A94FD99D5A5C80CE /* AmountTextField.swift in Sources */,
 				32CB71B10744D81EF237AB2C /* AccountStorage.swift in Sources */,
+				32CB7E65AAFFB9A1DCFA918C /* AccountStorageTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
