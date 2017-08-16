@@ -5,17 +5,17 @@ import RxSwift
 import RxCocoa
 
 class ExchangeViewController: UIViewController {
-    var disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
 
-    lazy var exchangeBtn = UIButton()
-    lazy var exchangeRateLbl = UILabel()
-    lazy var exchangeRateRevertedLbl = UILabel()
-    lazy var fromAmountField = AmountTextField(prefix: "-")
-    lazy var toAmountField = AmountTextField(prefix: "+")
+    private lazy var exchangeBtn = UIButton()
+    private lazy var exchangeRateLbl = UILabel()
+    private lazy var exchangeRateRevertedLbl = UILabel()
+    private lazy var fromAmountField = AmountTextField(prefix: "-")
+    private lazy var toAmountField = AmountTextField(prefix: "+")
 
-    var viewModel = ExchangeViewModel()
-    var fromScrollView: CurrencyScrollView!
-    var toScrollView: CurrencyScrollView!
+    private var viewModel = ExchangeViewModel()
+    private var fromScrollView: CurrencyScrollView!
+    private var toScrollView: CurrencyScrollView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,7 +122,7 @@ class ExchangeViewController: UIViewController {
                 })
                 .drive(onNext: { next in
                     self.fromAmountField.text = next
-                    self.updateAmountFieldsWidth()
+                    self.updateAmountFieldsConstraints()
                 })
                 .addDisposableTo(disposeBag)
 
@@ -138,7 +138,7 @@ class ExchangeViewController: UIViewController {
                 })
                 .drive(onNext: { next in
                     self.toAmountField.text = next
-                    self.updateAmountFieldsWidth()
+                    self.updateAmountFieldsConstraints()
                 })
                 .addDisposableTo(disposeBag)
 
@@ -153,7 +153,7 @@ class ExchangeViewController: UIViewController {
                 viewModel.fromScrollViewModel.currentItem.asObservable(),
                 viewModel.toScrollViewModel.currentItem.asObservable()
         ).subscribe(onNext: { _ in
-            var amountsNotEmpty = self.viewModel.toAmountOutput.value != nil &&
+            let amountsNotEmpty = self.viewModel.toAmountOutput.value != nil &&
                     self.viewModel.fromAmountOutput.value != nil
             self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
                     amountsNotEmpty &&
@@ -186,7 +186,7 @@ class ExchangeViewController: UIViewController {
                 .addDisposableTo(disposeBag)
     }
 
-    private func updateAmountFieldsWidth() {
+    private func updateAmountFieldsConstraints() {
         var amount = fromAmountField.text == nil || fromAmountField.text! == "" ? "0" : fromAmountField.text!
         var width = amount.size(attributes: [NSFontAttributeName: fromAmountField.font
                 ?? UIFont.systemFont(ofSize: 25)]).width

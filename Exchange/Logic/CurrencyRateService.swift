@@ -6,37 +6,20 @@ import RxCocoa
 
 class CurrencyRateService {
     private let currencyAPIUrl = "https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
-    var disposeBag = DisposeBag()
-
-    private(set) var currenciesStorage: Variable<[CurrencyType: Double]> = Variable<[CurrencyType: Double]>([.eur: 100,
-                                                                                                           .gbp: 100,
-                                                                                                           .usd: 100])
+    private var disposeBag = DisposeBag()
 
     private(set) var currenciesRates: Variable<[CurrencyType: Double]> = Variable<[CurrencyType: Double]>([.eur: 1,
-                                                                                                         .gbp: 0.90303,
-                                                                                                         .usd: 1.1732])
+                                                                                                           .gbp: 0.90303,
+                                                                                                           .usd: 1.1732])
 
     init() {
-        let timer = Observable<NSInteger>.interval(130, scheduler: MainScheduler.instance)
+        let timer = Observable<NSInteger>.interval(30, scheduler: MainScheduler.instance)
         timer.subscribe(onNext: { _ in
             self.updateRates()
                     .subscribe(onNext: { rate in
                         self.currenciesRates.value[rate.0] = rate.1
                     }).disposed(by: self.disposeBag)
         }).addDisposableTo(disposeBag)
-    }
-
-    func isEnoughFunds(from: CurrencyType, amount: Double) -> Bool {
-        return amount <= currenciesStorage.value[from]!
-    }
-
-    func exchange(from: CurrencyType, to: CurrencyType, amount: Double) {
-        guard let rate = getRate(from: from, to: to) else {
-            return
-        }
-        let toAmount = amount * rate
-        currenciesStorage.value[from] = currenciesStorage.value[from]! - amount
-        currenciesStorage.value[to] = currenciesStorage.value[to]! + toAmount
     }
 
     func getRate(from: CurrencyType, to: CurrencyType) -> Double? {

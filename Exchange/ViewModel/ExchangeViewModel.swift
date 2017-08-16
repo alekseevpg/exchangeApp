@@ -3,7 +3,9 @@ import RxSwift
 import RxCocoa
 
 class ExchangeViewModel {
-    var disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
+    private var exchangeRateService = DIContainer.Instance.resolve(CurrencyRateService.self)!
+    private var accountsStorage = DIContainer.Instance.resolve(AccountStorage.self)!
 
     var fromScrollViewModel = CurrencyScrollViewModel()
     var toScrollViewModel = CurrencyScrollViewModel()
@@ -18,8 +20,6 @@ class ExchangeViewModel {
 
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
 
-    var exchangeRateService = DIContainer.Instance.resolve(CurrencyRateService.self)!
-
     init() {
         Observable.combineLatest(
                         fromScrollViewModel.currentItem.asObservable(),
@@ -32,19 +32,16 @@ class ExchangeViewModel {
                 }).addDisposableTo(disposeBag)
     }
 
-    func updateCurrentExchangeRate() {
+    func exchange() {
         let from = fromScrollViewModel.currentItem.value
         let to = toScrollViewModel.currentItem.value
-
-        guard let rate = exchangeRateService.getRate(from: from, to: to) else {
+        guard let amount = self.fromAmountOutput.value else {
             return
         }
-        exchangeRate.value = "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
-
-        guard let rateReverted = exchangeRateService.getRate(from: to, to: from) else {
-            return
-        }
-        exchangeRateReverted.value = "1 \(to.toSign()) = \(rateReverted.toString()) \(from.toSign())"
+        accountsStorage.exchange(from: from, to: to, amount: amount)
+        fromAmountOutput.value = nil
+        toAmountOutput.value = nil
+        fromAmountInput.value = ""
     }
 
     func toFieldUpdate(_ input: String) {
@@ -72,10 +69,25 @@ class ExchangeViewModel {
         checkIfEnoughFunds()
     }
 
+    private func updateCurrentExchangeRate() {
+        let from = fromScrollViewModel.currentItem.value
+        let to = toScrollViewModel.currentItem.value
+
+        guard let rate = exchangeRateService.getRate(from: from, to: to) else {
+            return
+        }
+        exchangeRate.value = "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
+
+        guard let rateReverted = exchangeRateService.getRate(from: to, to: from) else {
+            return
+        }
+        exchangeRateReverted.value = "1 \(to.toSign()) = \(rateReverted.toString()) \(from.toSign())"
+    }
+
     private func checkIfEnoughFunds() {
         var isEnough = true
         if let amount = fromAmountOutput.value {
-            isEnough = exchangeRateService.isEnoughFunds(from: fromScrollViewModel.currentItem.value, amount: amount)
+            isEnough = accountsStorage.isEnoughFunds(from: fromScrollViewModel.currentItem.value, amount: amount)
         }
         sufficientFundsToExchange.value = isEnough
         fromScrollViewModel.sufficientFundsToExchange.value = isEnough
@@ -86,17 +98,5 @@ class ExchangeViewModel {
             return nil
         }
         return amount * rate
-    }
-
-    func exchange() {
-        let from = fromScrollViewModel.currentItem.value
-        let to = toScrollViewModel.currentItem.value
-        guard let amount = self.fromAmountOutput.value else {
-            return
-        }
-        exchangeRateService.exchange(from: from, to: to, amount: amount)
-        fromAmountOutput.value = nil
-        toAmountOutput.value = nil
-        fromAmountInput.value = ""
     }
 }

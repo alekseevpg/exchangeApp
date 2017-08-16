@@ -6,6 +6,9 @@ struct DIContainer {
         c.register(CurrencyRateService.self) { _ in
             CurrencyRateService()
         }.inObjectScope(.container)
+        c.register(AccountStorage.self) { _ in
+            AccountStorage(c.resolve(CurrencyRateService.self)!)
+        }.inObjectScope(.container)
     }
 
     func resolve<Service>(_ serviceType: Service.Type) -> Service? {

@@ -5,9 +5,9 @@ import RxSwift
 import RxCocoa
 
 class AmountTextField: UITextField {
+    private lazy var prefixLbl = UILabel()
+    private var prefix = ""
 
-    lazy var prefixLbl = UILabel()
-    var prefix = ""
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -62,5 +62,4 @@ extension AmountTextField: UITextFieldDelegate {
         let newLength = text.characters.count + string.characters.count - range.length
         return result && (newLength < text.characters.count || newLength <= 7)
     }
-
 }
