@@ -147,21 +147,17 @@ class ExchangeViewController: UIViewController {
             self.fromAmountField.becomeFirstResponder()
         }).addDisposableTo(disposeBag)
 
-        Observable.combineLatest(viewModel.sufficientFundsToExchange.asObservable(),
-                viewModel.toAmountOutput.asObservable(),
-                viewModel.fromAmountOutput.asObservable(),
-                viewModel.fromScrollViewModel.currentItem.asObservable(),
-                viewModel.toScrollViewModel.currentItem.asObservable()
-        ).subscribe(onNext: { _ in
-            let amountsNotEmpty = self.viewModel.toAmountOutput.value != nil &&
-                    self.viewModel.fromAmountOutput.value != nil
-            self.exchangeBtn.isEnabled = self.viewModel.sufficientFundsToExchange.value &&
-                    amountsNotEmpty &&
-                    self.viewModel.fromScrollViewModel.currentItem.value !=
-                            self.viewModel.toScrollViewModel.currentItem.value
-            self.fromAmountField.changePrefixVisibility(hidden: !amountsNotEmpty)
-            self.toAmountField.changePrefixVisibility(hidden: !amountsNotEmpty)
-        }).addDisposableTo(disposeBag)
+        viewModel.exchangeBtnEnabled
+                .bind(to: exchangeBtn.rx.isEnabled)
+                .addDisposableTo(disposeBag)
+
+        viewModel.amountPrefixIsHidden
+                .bind(to: fromAmountField.prefixLbl.rx.isHidden)
+                .addDisposableTo(disposeBag)
+
+        viewModel.amountPrefixIsHidden
+                .bind(to: toAmountField.prefixLbl.rx.isHidden)
+                .addDisposableTo(disposeBag)
 
         viewModel.exchangeRate.asObservable()
                 .bind(to: exchangeRateLbl.rx.text)

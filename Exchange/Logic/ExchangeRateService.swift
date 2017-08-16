@@ -6,6 +6,7 @@ import RxCocoa
 
 protocol ExchangeRateServiceProtocol {
     func getRate(from: CurrencyType, to: CurrencyType) -> Double?
+    var currenciesRates: Variable<[CurrencyType: Double]> { get }
 }
 
 class ExchangeRateService: ExchangeRateServiceProtocol {

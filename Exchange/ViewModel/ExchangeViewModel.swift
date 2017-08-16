@@ -4,7 +4,7 @@ import RxCocoa
 
 class ExchangeViewModel {
     private var disposeBag = DisposeBag()
-    private var exchangeRateService = DIContainer.Instance.resolve(ExchangeRateService.self)!
+    private var exchangeRateService = DIContainer.Instance.resolve(ExchangeRateServiceProtocol.self)!
     private var accountsStorage = DIContainer.Instance.resolve(AccountStorage.self)!
 
     var fromScrollViewModel = CurrencyScrollViewModel()
@@ -20,13 +20,33 @@ class ExchangeViewModel {
 
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
 
+    let exchangeBtnEnabled: Observable<Bool>
+    let amountPrefixIsHidden: Observable<Bool>
+
     init() {
+        exchangeBtnEnabled = Observable.combineLatest(
+                sufficientFundsToExchange.asObservable(),
+                toAmountOutput.asObservable(),
+                fromAmountOutput.asObservable(),
+                fromScrollViewModel.currentItem.asObservable(),
+                toScrollViewModel.currentItem.asObservable()) { (enoughFunds: Bool, toAmount: Double?,
+                                                                 fromAmount: Double?, fromItem: CurrencyType,
+                                                                 toItem: CurrencyType) in
+            return enoughFunds && toAmount != nil && fromAmount != nil && fromItem != toItem
+        }.shareReplay(1)
+
+        amountPrefixIsHidden = Observable.combineLatest(
+                toAmountOutput.asObservable(),
+                fromAmountOutput.asObservable()) {
+            !($0 != nil && $1 != nil)
+        }.shareReplay(1)
+
         Observable.combineLatest(
                         fromScrollViewModel.currentItem.asObservable(),
                         fromAmountInput.asObservable(),
                         toScrollViewModel.currentItem.asObservable(),
                         exchangeRateService.currenciesRates.asObservable())
-                .subscribe(onNext: { next in
+                .subscribe(onNext: { _ in
                     self.updateCurrentExchangeRate()
                     self.fromFieldUpdate()
                 }).addDisposableTo(disposeBag)

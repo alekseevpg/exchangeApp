@@ -5,7 +5,7 @@ import RxSwift
 import RxCocoa
 
 class AmountTextField: UITextField {
-    private lazy var prefixLbl = UILabel()
+    lazy var prefixLbl = UILabel()
     private var prefix = ""
 
     public required init?(coder aDecoder: NSCoder) {
