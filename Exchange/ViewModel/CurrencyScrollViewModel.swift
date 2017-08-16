@@ -16,14 +16,12 @@ class CurrencyScrollViewModel {
                                                       .usd: Variable<Double>(0)]
 
     init() {
-        accountsStorage.currenciesStorage.asObservable()
-                .subscribe(onNext: { rates in
-                    for rate in rates {
-                        if (self.accounts[rate.key] != nil) {
-                            self.accounts[rate.key]!.value = rate.value
-                        }
-                    }
-                }).addDisposableTo(disposeBag)
+        for account in accountsStorage.accounts {
+            account.value.asDriver()
+                    .drive(onNext: { next in
+                        self.accounts[account.key]!.value = next
+                    }).addDisposableTo(disposeBag)
+        }
 
         currentIndex.asObservable().subscribe(onNext: { next in
             self.currentItem.value = self.items[next]

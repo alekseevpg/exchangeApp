@@ -3,18 +3,17 @@ import RxCocoa
 import RxSwift
 
 class AccountStorage {
-
-    private(set) var currenciesStorage: Variable<[CurrencyType: Double]> = Variable<[CurrencyType: Double]>([.eur: 100,
-                                                                                                             .gbp: 100,
-                                                                                                             .usd: 100])
-
     var exchangeRateService: CurrencyRateService
+
+    private (set) var accounts: [CurrencyType: Variable<Double>] = [.eur: Variable<Double>(100),
+                                                                    .gbp: Variable<Double>(100),
+                                                                    .usd: Variable<Double>(100)]
     init(_ exchangeRateService: CurrencyRateService) {
         self.exchangeRateService = exchangeRateService
     }
 
     func isEnoughFunds(from: CurrencyType, amount: Double) -> Bool {
-        return amount <= currenciesStorage.value[from]!
+        return amount <= accounts[from]!.value
     }
 
     func exchange(from: CurrencyType, to: CurrencyType, amount: Double) {
@@ -22,7 +21,7 @@ class AccountStorage {
             return
         }
         let toAmount = amount * rate
-        currenciesStorage.value[from] = currenciesStorage.value[from]! - amount
-        currenciesStorage.value[to] = currenciesStorage.value[to]! + toAmount
+        accounts[from]!.value = accounts[from]!.value - amount
+        accounts[to]!.value = accounts[to]!.value + toAmount
     }
 }
