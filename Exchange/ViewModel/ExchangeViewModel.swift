@@ -19,22 +19,15 @@ class ExchangeViewModel {
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
 
     var exchangeRateService = DIContainer.Instance.resolve(CurrencyRateService.self)!
-    init() {
-        Observable.combineLatest(
-                        fromScrollViewModel.currentItem.asObservable(),
-                        toScrollViewModel.currentItem.asObservable(),
-                        exchangeRateService.currenciesRates.asObservable())
-                .subscribe(onNext: { _ in
-                    self.updateCurrentExchangeRate()
-                })
-                .addDisposableTo(disposeBag)
 
+    init() {
         Observable.combineLatest(
                         fromScrollViewModel.currentItem.asObservable(),
                         fromAmountInput.asObservable(),
                         toScrollViewModel.currentItem.asObservable(),
                         exchangeRateService.currenciesRates.asObservable())
                 .subscribe(onNext: { next in
+                    self.updateCurrentExchangeRate()
                     self.fromFieldUpdate()
                 }).addDisposableTo(disposeBag)
     }
@@ -42,6 +35,7 @@ class ExchangeViewModel {
     func updateCurrentExchangeRate() {
         let from = fromScrollViewModel.currentItem.value
         let to = toScrollViewModel.currentItem.value
+
         guard let rate = exchangeRateService.getRate(from: from, to: to) else {
             return
         }
