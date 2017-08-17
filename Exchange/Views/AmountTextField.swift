@@ -24,7 +24,7 @@ class AmountTextField: UITextField {
         self.font = UIFont.systemFont(ofSize: 25)
         self.textColor = .white
         self.textAlignment = .right
-        self.keyboardType = .numberPad
+        self.keyboardType = .decimalPad
         self.delegate = self
         self.adjustsFontSizeToFitWidth = false
         self.adjustsFontForContentSizeCategory = true

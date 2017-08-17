@@ -33,6 +33,7 @@ class ExchangeViewModel {
                                                                  fromAmount: Double?, fromItem: CurrencyType,
                                                                  toItem: CurrencyType) in
             return enoughFunds && toAmount != nil && fromAmount != nil && fromItem != toItem
+                    && fromAmount! != 0 && toAmount! != 0
         }.shareReplay(1)
 
         amountPrefixIsHidden = Observable.combineLatest(

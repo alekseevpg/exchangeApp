@@ -18,7 +18,9 @@ class ExchangeRateService: ExchangeRateServiceProtocol {
                                                                                                            .usd: 1.1732])
 
     init() {
-        let timer = Observable<NSInteger>.interval(30, scheduler: MainScheduler.instance)
+        let timer = Observable<NSInteger>
+                .interval(RxTimeInterval(30), scheduler: MainScheduler.instance)
+                .startWith(-1)
         timer.subscribe(onNext: { _ in
             self.updateRates()
                     .subscribe(onNext: { rate in
@@ -40,6 +42,7 @@ class ExchangeRateService: ExchangeRateServiceProtocol {
     }
 
     private func updateRates() -> Observable<(CurrencyType, Double)> {
+        print("updateRates started")
         return Observable.create { observer in
             Alamofire.request(self.currencyAPIUrl, method: .get)
                     .responseString { response in
@@ -58,6 +61,8 @@ class ExchangeRateService: ExchangeRateServiceProtocol {
                             observer.onNext(type, rate2)
                         })
                         observer.onCompleted()
+                        print("updateRates finished")
+
                     }
             return Disposables.create()
         }
