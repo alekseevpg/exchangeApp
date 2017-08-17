@@ -122,7 +122,7 @@ class ExchangeViewController: UIViewController {
                 })
                 .drive(onNext: { next in
                     self.fromAmountField.text = next
-                    self.updateAmountFieldsConstraints()
+                    self.fromAmountField.setWidthToFitText()
                 })
                 .addDisposableTo(disposeBag)
 
@@ -138,7 +138,7 @@ class ExchangeViewController: UIViewController {
                 })
                 .drive(onNext: { next in
                     self.toAmountField.text = next
-                    self.updateAmountFieldsConstraints()
+                    self.toAmountField.setWidthToFitText()
                 })
                 .addDisposableTo(disposeBag)
 
@@ -180,21 +180,5 @@ class ExchangeViewController: UIViewController {
                     self.toScrollView.updateFrame()
                 })
                 .addDisposableTo(disposeBag)
-    }
-
-    private func updateAmountFieldsConstraints() {
-        var amount = fromAmountField.text == nil || fromAmountField.text! == "" ? "0" : fromAmountField.text!
-        var width = amount.size(attributes: [NSFontAttributeName: fromAmountField.font
-                ?? UIFont.systemFont(ofSize: 25)]).width
-        fromAmountField.snp.updateConstraints({ make in
-            make.width.equalTo(width + 10)
-        })
-
-        amount = toAmountField.text == nil || toAmountField.text! == "" ? "0" : toAmountField.text!
-        width = amount.size(attributes: [NSFontAttributeName: toAmountField.font
-                ?? UIFont.systemFont(ofSize: 25)]).width
-        toAmountField.snp.updateConstraints({ make in
-            make.width.equalTo(width + 10)
-        })
     }
 }

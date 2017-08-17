@@ -45,6 +45,18 @@ class AmountTextField: UITextField {
     func changePrefixVisibility(hidden: Bool) {
         self.prefixLbl.isHidden = hidden
     }
+
+    func setWidthToFitText() {
+        if (snp.width != nil) {
+            var amount = text == nil || text! == "" ? "0" : text!
+            var width = amount.size(attributes: [NSFontAttributeName: font ?? UIFont.systemFont(ofSize: 25)]).width
+
+            snp.updateConstraints({ make in
+                make.width.equalTo(width + 10)
+            })
+        }
+
+    }
 }
 
 extension AmountTextField: UITextFieldDelegate {
