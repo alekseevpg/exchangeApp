@@ -5,7 +5,9 @@ import RxSwift
 import RxCocoa
 
 protocol ExchangeRateServiceProtocol {
+
     func getRate(from: CurrencyType, to: CurrencyType) -> Double?
+
     var currenciesRates: Variable<[CurrencyType: Double]> { get }
 }
 
@@ -33,6 +35,7 @@ class ExchangeRateService: ExchangeRateServiceProtocol {
         guard let rateTo = currenciesRates.value[to], let rateFrom = currenciesRates.value[from] else {
             return nil
         }
+        //ECB give us all rates relative to eur. So we assert that eur is always 1
         switch from {
         case .eur:
             return rateTo

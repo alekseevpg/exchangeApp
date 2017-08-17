@@ -3,6 +3,7 @@ import Foundation
 extension Double {
     func toString(_ fractionalDigits: Int = 2) -> String {
         let formatter = NumberFormatter()
+        //We want to show doubles in format #.##
         formatter.minimumIntegerDigits = 1
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = fractionalDigits
@@ -16,6 +17,7 @@ extension Optional where Wrapped == Double {
             return ""
         }
         let formatter = NumberFormatter()
+        //We want to show doubles in format #.##
         formatter.minimumIntegerDigits = 1
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 2

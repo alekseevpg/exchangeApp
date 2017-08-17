@@ -50,6 +50,7 @@ final class ExchangeViewModel {
                 .subscribe(onNext: { _ in
                     self.updateCurrentExchangeRate()
                     self.fromFieldUpdate()
+                    self.checkIfEnoughFunds()
                 }).addDisposableTo(disposeBag)
     }
 

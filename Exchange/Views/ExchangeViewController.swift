@@ -114,6 +114,7 @@ class ExchangeViewController: UIViewController {
     private func bindModel() {
         fromAmountField.rx.text
                 .subscribe(onNext: { (next: String?) in
+                    //If last character is one of (.,) we assume that user didn't end his input and we shoudln't update
                     var value = next ?? ""
                     if let last = value.characters.last, (last == "." || last == ",") {
                     } else {
@@ -135,6 +136,7 @@ class ExchangeViewController: UIViewController {
 
         toAmountField.rx.text
                 .subscribe(onNext: { (next: String?) in
+                    //If last character is one of (.,) we assume that user didn't end his input and we shoudln't update
                     var value = next ?? ""
                     if let last = value.characters.last, (last == "." || last == ",") {
                     } else {
