@@ -52,13 +52,13 @@ class ExchangeRateService: ExchangeRateServiceProtocol {
                         }
                         let xml = SWXMLHash.parse(result)
                         xml["gesmes:Envelope"]["Cube"]["Cube"]["Cube"].all.forEach({ item in
-                            guard let currencyName = item.element?.attribute(by: "currency")?.text,
-                                  let type = CurrencyType(rawValue: currencyName),
-                                  let rate = item.element?.attribute(by: "rate")?.text,
-                                  let rate2 = Double(rate) else {
+                            guard let currencyTypeStr = item.element?.attribute(by: "currency")?.text,
+                                  let type = CurrencyType(rawValue: currencyTypeStr),
+                                  let currencyRateStr = item.element?.attribute(by: "rate")?.text,
+                                  let rate = Double(currencyRateStr) else {
                                 return
                             }
-                            observer.onNext(type, rate2)
+                            observer.onNext(type, rate)
                         })
                         observer.onCompleted()
                         print("updateRates finished")
