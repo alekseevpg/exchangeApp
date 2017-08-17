@@ -376,7 +376,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Exchange-ExchangeTests/Pods-Exchange-ExchangeTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ExchangeTests/Pods-ExchangeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		572712960A0482DD6C13773E /* [CP] Embed Pods Frameworks */ = {
@@ -412,7 +412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Exchange-ExchangeTests/Pods-Exchange-ExchangeTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ExchangeTests/Pods-ExchangeTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		960168C756D29CD182B17CD3 /* [CP] Embed Pods Frameworks */ = {
@@ -423,11 +423,9 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Exchange/Pods-Exchange-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireNetworkActivityIndicator/AlamofireNetworkActivityIndicator.framework",
-				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
-				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
 				"${BUILT_PRODUCTS_DIR}/SWXMLHash/SWXMLHash.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
@@ -435,11 +433,9 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireNetworkActivityIndicator.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWXMLHash.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
@@ -478,7 +474,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Exchange-ExchangeTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-ExchangeTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -595,7 +591,7 @@
 		};
 		32CB747B2DBBFC2F7533FDDF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F698CFCBC11420E14066A015 /* Pods-Exchange-ExchangeTests.release.xcconfig */;
+			baseConfigurationReference = BFDA7432D2BE7CABE738EE47 /* Pods-ExchangeTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Exchange.app/Exchange";
 				INFOPLIST_FILE = ExchangeTests/Info.plist;
@@ -665,7 +661,7 @@
 		};
 		32CB7AD9A9ECE3AEC5398002 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4845EB53D11D57302DB9A829 /* Pods-Exchange-ExchangeTests.debug.xcconfig */;
+			baseConfigurationReference = 2EAF2A477DCED332482B7CD5 /* Pods-ExchangeTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Exchange.app/Exchange";
 				INFOPLIST_FILE = ExchangeTests/Info.plist;

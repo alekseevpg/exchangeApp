@@ -7,8 +7,6 @@ target 'Exchange' do
 
   # Pods for Exchange
   pod 'Alamofire', '~> 4.5.0'
-  pod 'AlamofireNetworkActivityIndicator', '~> 2.2.0'
-  pod 'AlamofireObjectMapper', '~> 4.1.0'
   pod 'SnapKit', '~> 3.2.0'
   pod 'SWXMLHash'
   pod 'Swinject', '~> 2.1.0'

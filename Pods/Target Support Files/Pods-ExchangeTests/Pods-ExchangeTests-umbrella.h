@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double AlamofireObjectMapperVersionNumber;
-FOUNDATION_EXPORT const unsigned char AlamofireObjectMapperVersionString[];
+FOUNDATION_EXPORT double Pods_ExchangeTestsVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_ExchangeTestsVersionString[];
 
