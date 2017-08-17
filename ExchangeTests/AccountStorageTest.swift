@@ -1,27 +1,51 @@
 import Foundation
+import XCTest
+import RxSwift
+import RxCocoa
+import RxTest
+
 @testable import Exchange
 
 class AccountStorageTest: XCTestCase {
+    var accountStorage: AccountStorage!
+    var disposeBag = DisposeBag()
 
     override func setUp() {
         super.setUp()
-        var storage = AccountStorage()
+        //Fake rate 1 eur - 10 gbp
+        accountStorage = AccountStorage(FakeRateService(10))
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    func testIsEnoughFunds() {
+        XCTAssert(accountStorage.isEnoughFunds(from: .eur, amount: 50))
+        XCTAssert(accountStorage.isEnoughFunds(from: .eur, amount: 100))
+        XCTAssert(!accountStorage.isEnoughFunds(from: .eur, amount: 200))
     }
 
-    func isEnoughFundsTest() {
+    func testExchange() {
+        let scheduler = TestScheduler(initialClock: 0)
 
+        let fromObserver = scheduler.createObserver(Double.self)
+        let toObserver = scheduler.createObserver(Double.self)
+        accountStorage.accounts[.eur]!.asObservable()
+                .subscribe(fromObserver)
+                .addDisposableTo(disposeBag)
+        accountStorage.accounts[.gbp]!.asObservable()
+                .subscribe(toObserver)
+                .addDisposableTo(disposeBag)
+        let fromResult = [
+                next(0, Double(100)),
+                next(0, Double(0))
+        ]
+        let toResult = [
+                next(0, Double(100)),
+                next(0, Double(1100))
+        ]
+        scheduler.start()
+
+        accountStorage.exchange(from: .eur, to: .gbp, amount: 100)
+
+        XCTAssertEqual(fromObserver.events, fromResult)
+        XCTAssertEqual(toObserver.events, toResult)
     }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }
