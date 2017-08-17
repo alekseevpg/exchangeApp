@@ -4,13 +4,13 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class CurrencyScrollView: UIView {
-    var disposeBag = DisposeBag()
+final class CurrencyScrollView: UIView {
+    private var disposeBag = DisposeBag()
     var viewModel: CurrencyScrollViewModel!
 
-    lazy var scrollView = UIScrollView()
-    lazy var pageControl = UIPageControl()
-    lazy var contentView = UIView()
+    private lazy var scrollView = UIScrollView()
+    private lazy var pageControl = UIPageControl()
+    private lazy var contentView = UIView()
     private lazy var shadedLayer = ShadedLayer()
 
     private var isShaded: Bool = false
@@ -28,34 +28,18 @@ class CurrencyScrollView: UIView {
         self.bindModel()
     }
 
+    func updateFrame() {
+        if isShaded {
+            shadedLayer.frame = self.bounds
+        }
+        scrollView.contentSize = CGSize(width: contentView.frame.width, height: frame.height)
+        scrollView.scrollRectToVisible(CGRect(x: frame.width * CGFloat(viewModel.currentIndex.value + 1), y: 0,
+                width: frame.width, height: frame.height), animated: false)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         updateFrame()
-    }
-
-    private func bindModel() {
-        scrollView.rx.didEndDecelerating.subscribe(onNext: { _ in
-            let width = self.bounds.width
-            let height = self.bounds.height
-            let offset = self.scrollView.contentOffset
-            if (offset.x == 0) {
-                self.scrollView.scrollRectToVisible(CGRect(x: CGFloat(self.viewModel.items.count) * width, y: 0,
-                        width: width, height: height), animated: false)
-                self.viewModel.currentIndex.value = self.viewModel.items.count - 1
-            } else if (offset.x == CGFloat(self.viewModel.items.count + 1) * width) {
-                self.scrollView.scrollRectToVisible(CGRect(x: width, y: 0,
-                        width: width, height: height), animated: false)
-                self.viewModel.currentIndex.value = 0
-            } else {
-                let page = Int((offset.x) / width)
-                self.viewModel.currentIndex.value = page - 1
-            }
-        }).disposed(by: disposeBag)
-
-        viewModel.currentIndex.asObservable()
-                .bind(to: pageControl.rx.currentPage)
-                .addDisposableTo(disposeBag)
-        viewModel.currentIndex.value = 0
     }
 
     private func createViews() {
@@ -102,13 +86,29 @@ class CurrencyScrollView: UIView {
         })
     }
 
-    func updateFrame() {
-        if isShaded {
-            shadedLayer.frame = self.bounds
-        }
-        scrollView.contentSize = CGSize(width: contentView.frame.width, height: frame.height)
-        scrollView.scrollRectToVisible(CGRect(x: frame.width * CGFloat(viewModel.currentIndex.value + 1), y: 0,
-                width: frame.width, height: frame.height), animated: false)
+    private func bindModel() {
+        scrollView.rx.didEndDecelerating.subscribe(onNext: { _ in
+            let width = self.bounds.width
+            let height = self.bounds.height
+            let offset = self.scrollView.contentOffset
+            if (offset.x == 0) {
+                self.scrollView.scrollRectToVisible(CGRect(x: CGFloat(self.viewModel.items.count) * width, y: 0,
+                        width: width, height: height), animated: false)
+                self.viewModel.currentIndex.value = self.viewModel.items.count - 1
+            } else if (offset.x == CGFloat(self.viewModel.items.count + 1) * width) {
+                self.scrollView.scrollRectToVisible(CGRect(x: width, y: 0,
+                        width: width, height: height), animated: false)
+                self.viewModel.currentIndex.value = 0
+            } else {
+                let page = Int((offset.x) / width)
+                self.viewModel.currentIndex.value = page - 1
+            }
+        }).disposed(by: disposeBag)
+
+        viewModel.currentIndex.asObservable()
+                .bind(to: pageControl.rx.currentPage)
+                .addDisposableTo(disposeBag)
+        viewModel.currentIndex.value = 0
     }
 
     private func createCurrencyView(type: CurrencyType, leading: ConstraintRelatableTarget) -> CurrencyView {

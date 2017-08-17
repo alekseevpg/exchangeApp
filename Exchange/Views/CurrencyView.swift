@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-class CurrencyView: UIView {
+final class CurrencyView: UIView {
     lazy var titleLbl = UILabel()
     lazy var amountLbl = UILabel()
 

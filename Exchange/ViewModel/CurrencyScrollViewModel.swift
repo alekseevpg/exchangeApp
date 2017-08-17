@@ -2,7 +2,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-class CurrencyScrollViewModel {
+final class CurrencyScrollViewModel {
     var accountsStorage = DIContainer.Instance.resolve(AccountStorage.self)!
     var disposeBag = DisposeBag()
 

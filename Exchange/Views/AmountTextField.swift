@@ -4,7 +4,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class AmountTextField: UITextField {
+final class AmountTextField: UITextField {
     lazy var prefixLbl = UILabel()
     private var prefix = ""
 

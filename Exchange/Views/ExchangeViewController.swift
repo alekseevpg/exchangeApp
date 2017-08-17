@@ -41,7 +41,8 @@ class ExchangeViewController: UIViewController {
         toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel, shaded: true)
         view.addSubview(toScrollView)
         view.addSubview(toAmountField)
-        toAmountField.textColor = UIColor.white.withAlphaComponent(0.3)
+        toAmountField.textColor = UIColor.white.withAlphaComponent(0.8)
+        toAmountField.prefixLbl.textColor = UIColor.white.withAlphaComponent(0.8)
 
         exchangeBtn.setTitle("Exchange", for: .normal)
         exchangeBtn.setTitleColor(.white, for: .normal)
@@ -137,7 +138,7 @@ class ExchangeViewController: UIViewController {
                     var value = next ?? ""
                     if let last = value.characters.last, (last == "." || last == ",") {
                     } else {
-                        self.viewModel.toFieldUpdate(value ?? "")
+                        self.viewModel.toFieldUpdate(value)
                     }
                     self.toAmountField.setWidthToFitText()
                 })
