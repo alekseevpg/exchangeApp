@@ -70,7 +70,6 @@ extension AmountTextField: UITextFieldDelegate {
         let newLength = text.characters.count + string.characters.count - range.length
         var components = text.components(separatedBy: CharacterSet(charactersIn: ",."))
         let precisionNotReached = components.count <= 1 || components[1].characters.count < 2
-        print("precisionReached \(precisionNotReached)")
         return result && (newLength < text.characters.count || (newLength <= 7 && precisionNotReached))
     }
 }
