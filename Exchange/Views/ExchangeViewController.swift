@@ -41,6 +41,7 @@ class ExchangeViewController: UIViewController {
         toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel, shaded: true)
         view.addSubview(toScrollView)
         view.addSubview(toAmountField)
+        toAmountField.textColor = UIColor.white.withAlphaComponent(0.3)
 
         exchangeBtn.setTitle("Exchange", for: .normal)
         exchangeBtn.setTitleColor(.white, for: .normal)
