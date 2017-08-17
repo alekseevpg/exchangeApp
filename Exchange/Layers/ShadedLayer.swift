@@ -1,7 +1,7 @@
 import UIKit
+import QuartzCore
 
-class ShadedLayer: QuartzCore.CALayer {
-
+class ShadedLayer: CALayer {
     required override init() {
         super.init()
         needsDisplayOnBoundsChange = true

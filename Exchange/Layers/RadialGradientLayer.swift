@@ -1,7 +1,7 @@
 import UIKit
+import QuartzCore
 
 class RadialGradientLayer: CALayer {
-
     required override init() {
         super.init()
         needsDisplayOnBoundsChange = true
