@@ -13,7 +13,7 @@ class AccountStorageTest: XCTestCase {
     override func setUp() {
         super.setUp()
         //Fake rate 1 eur - 10 gbp
-        accountStorage = AccountStorage(FakeRateService(10))
+        accountStorage = AccountStorage(MockExchangeRateService(10))
     }
 
     func testIsEnoughFunds() {

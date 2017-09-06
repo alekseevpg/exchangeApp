@@ -4,121 +4,139 @@ import RxCocoa
 
 final class ExchangeViewModel {
     private var disposeBag = DisposeBag()
-    private var exchangeRateService = DIContainer.Instance.resolve(ExchangeRateServiceProtocol.self)!
-    private var accountsStorage = DIContainer.Instance.resolve(AccountStorage.self)!
 
     var fromScrollViewModel = CurrencyScrollViewModel()
     var toScrollViewModel = CurrencyScrollViewModel()
 
-    var fromAmountInput: Variable<String> = Variable<String>("")
     var fromAmountOutput: Variable<Double?> = Variable<Double?>(nil)
-
-    var toAmountOutput: Variable<Double?> = Variable<Double?>(nil)
-
-    var exchangeRate: Variable<String> = Variable<String>("")
-    var exchangeRateReverted: Variable<String> = Variable<String>("")
-
     var sufficientFundsToExchange: Variable<Bool> = Variable<Bool>(true)
 
+    var fromUpdated: Observable<Double?>
+    var toUpdated: Observable<Double?>
+    var exchangeRate: Observable<String>
+    var exchangeRateReverted: Observable<String>
     let exchangeBtnEnabled: Observable<Bool>
-    let amountPrefixIsHidden: Observable<Bool>
+    let toPrefixIsHidden: Observable<Bool>
+    let fromPrefixIsHidden: Observable<Bool>
+    var exchanged: Observable<()>
 
-    init() {
+    init(exchangeTap: Observable<Void>,
+         fromItem: Observable<CurrencyType>,
+         toItem: Observable<CurrencyType>,
+         fromFieldText: Observable<String>,
+         toFieldText: Observable<String>,
+         exchangeService: ExchangeRateServiceProtocol,
+         accountsStorage: AccountStorage) {
+
+        var fromVar = Variable<Double>(0)
+        var toVar = Variable<Double>(0)
+        let filtredFrom = fromFieldText
+                .throttle(0.3, scheduler: MainScheduler.instance)
+                .distinctUntilChanged()
+                .filter { input in
+                    if let last = input.characters.last, (last == "." || last == ",") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }.map { amount -> Double in
+                    fromVar.value = Double(amount) ?? 0
+                    return fromVar.value
+                }
+
+        let filtredTo = toFieldText
+                .throttle(0.3, scheduler: MainScheduler.instance)
+                .distinctUntilChanged()
+                .filter { input in
+                    if let last = input.characters.last, (last == "." || last == ",") {
+                        return false
+                    } else {
+                        return true
+                    }
+                }.map { amount -> Double in
+                    toVar.value = Double(amount) ?? 0
+                    return toVar.value
+                }
+
+        var ratesUpdated = exchangeService.currenciesRates.asObservable()
+
+        exchangeRate = Observable.combineLatest(fromItem, toItem, ratesUpdated) { from, to, _ in
+            guard let rate = exchangeService.getRate(from: from, to: to) else {
+                return ""
+            }
+            return "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
+        }
+
+        exchangeRateReverted = Observable.combineLatest(fromItem, toItem, ratesUpdated) { from, to, _ in
+            guard let rate = exchangeService.getRate(from: to, to: from) else {
+                return ""
+            }
+            return "1 \(to.toSign()) = \(rate.toString()) \(from.toSign())"
+        }
+
+        var toInfo = Observable.combineLatest(fromItem, toItem, filtredTo, ratesUpdated) { from, to, _, _ in
+            return (from, to)
+        }
+        fromUpdated = toInfo.withLatestFrom(toVar.asObservable()) { info, _ in
+            guard let rate = exchangeService.getRate(from: info.1, to: info.0) else {
+                return nil
+            }
+            fromVar.value = toVar.value * rate
+            return fromVar.value
+        }
+
+        var fromInfo = Observable.combineLatest(fromItem, toItem, filtredFrom, ratesUpdated) { from, to, _, _ in
+            return (from, to)
+        }
+        toUpdated = fromInfo.withLatestFrom(fromVar.asObservable()) { info, _ in
+            guard let rate = exchangeService.getRate(from: info.0, to: info.1) else {
+                return nil
+            }
+            toVar.value = fromVar.value * rate
+            return toVar.value
+        }
+
+        let exchangeInfo = Observable.combineLatest(fromItem, toItem, fromUpdated) {
+            return ($0, $1, $2)
+        }
+
+        let storage = accountsStorage
+        exchanged = exchangeTap.withLatestFrom(exchangeInfo)
+                .flatMapLatest { (from, to, amount) in
+                    return storage.exchangeTemp(from: from, to: to, amount: amount!) //todo unwrap
+                }
+
         exchangeBtnEnabled = Observable.combineLatest(
-                sufficientFundsToExchange.asObservable(),
-                toAmountOutput.asObservable(),
-                fromAmountOutput.asObservable(),
-                fromScrollViewModel.currentItem.asObservable(),
-                toScrollViewModel.currentItem.asObservable()) { (enoughFunds: Bool, toAmount: Double?,
-                                                                 fromAmount: Double?, fromItem: CurrencyType,
-                                                                 toItem: CurrencyType) in
-            return enoughFunds && toAmount != nil && fromAmount != nil && fromItem != toItem
-                    && fromAmount! != 0 && toAmount! != 0
-        }.shareReplay(1)
+                        sufficientFundsToExchange.asObservable(),
+                        toUpdated,
+                        fromUpdated,
+                        fromItem, toItem) { (_: Bool, toAmount: Double?,
+                                             fromAmount: Double?, fromItem: CurrencyType,
+                                             toItem: CurrencyType) in
+                    return toAmount != nil && fromAmount != nil && fromItem != toItem
+                            && fromAmount! != 0 && toAmount! != 0
+                }.distinctUntilChanged()
+                .shareReplay(1)
 
-        amountPrefixIsHidden = Observable.combineLatest(
-                toAmountOutput.asObservable(),
-                fromAmountOutput.asObservable()) {
-            !($0 != nil && $1 != nil)
-        }.shareReplay(1)
+        fromPrefixIsHidden = fromVar
+                .asObservable()
+                .map {
+                    $0 == 0
+                }
 
-        Observable.combineLatest(
-                        fromScrollViewModel.currentItem.asObservable(),
-                        fromAmountInput.asObservable(),
-                        toScrollViewModel.currentItem.asObservable(),
-                        exchangeRateService.currenciesRates.asObservable())
-                .subscribe(onNext: { _ in
-                    self.updateCurrentExchangeRate()
-                    self.fromFieldUpdate()
-                    self.checkIfEnoughFunds()
-                }).addDisposableTo(disposeBag)
-    }
-
-    func exchange() {
-        let from = fromScrollViewModel.currentItem.value
-        let to = toScrollViewModel.currentItem.value
-        guard let amount = self.fromAmountOutput.value else {
-            return
-        }
-        accountsStorage.exchange(from: from, to: to, amount: amount)
-        fromAmountOutput.value = nil
-        toAmountOutput.value = nil
-        fromAmountInput.value = ""
-    }
-
-    func toFieldUpdate(_ input: String) {
-        guard let amount = Double(input) else {
-            fromAmountOutput.value = nil
-            return
-        }
-        let to = toScrollViewModel.currentItem.value
-        let from = fromScrollViewModel.currentItem.value
-        fromAmountOutput.value = convert(from: to, to: from, amount: amount)
-        fromAmountInput.value = fromAmountOutput.value.toString()
-        toAmountOutput.value = amount
-        checkIfEnoughFunds()
-    }
-
-    private func fromFieldUpdate() {
-        guard let amount = Double(fromAmountInput.value) else {
-            toAmountOutput.value = nil
-            return
-        }
-        let to = toScrollViewModel.currentItem.value
-        let from = fromScrollViewModel.currentItem.value
-        toAmountOutput.value = convert(from: from, to: to, amount: amount)
-        fromAmountOutput.value = amount
-        checkIfEnoughFunds()
-    }
-
-    private func updateCurrentExchangeRate() {
-        let from = fromScrollViewModel.currentItem.value
-        let to = toScrollViewModel.currentItem.value
-
-        guard let rate = exchangeRateService.getRate(from: from, to: to) else {
-            return
-        }
-        exchangeRate.value = "1 \(from.toSign()) = \(rate.toString(4)) \(to.toSign())"
-
-        guard let rateReverted = exchangeRateService.getRate(from: to, to: from) else {
-            return
-        }
-        exchangeRateReverted.value = "1 \(to.toSign()) = \(rateReverted.toString()) \(from.toSign())"
+        toPrefixIsHidden = toVar
+                .asObservable()
+                .map {
+                    $0 == 0
+                }
     }
 
     private func checkIfEnoughFunds() {
-        var isEnough = true
-        if let amount = fromAmountOutput.value {
-            isEnough = accountsStorage.isEnoughFunds(from: fromScrollViewModel.currentItem.value, amount: amount)
-        }
-        sufficientFundsToExchange.value = isEnough
-        fromScrollViewModel.sufficientFundsToExchange.value = isEnough
-    }
-
-    private func convert(from: CurrencyType, to: CurrencyType, amount: Double) -> Double? {
-        guard let rate = exchangeRateService.getRate(from: from, to: to) else {
-            return nil
-        }
-        return amount * rate
+//        var isEnough = true
+//        if let amount = fromAmountOutput.value {
+//            isEnough = accountsStorage.isEnoughFunds(from: fromScrollViewModel.currentItem.value, amount: amount)
+//        }
+//        sufficientFundsToExchange.value = isEnough
+//        fromScrollViewModel.sufficientFundsToExchange.value = isEnough
     }
 }

@@ -20,15 +20,15 @@ class ExchangeRateService: ExchangeRateServiceProtocol {
                                                                                                            .usd: 1.1732])
 
     init() {
-        let timer = Observable<NSInteger>
-                .interval(RxTimeInterval(30), scheduler: MainScheduler.instance)
+        Observable<NSInteger>
+                .interval(RxTimeInterval(3000), scheduler: MainScheduler.instance)
                 .startWith(-1)
-        timer.subscribe(onNext: { _ in
-            self.updateRates()
-                    .subscribe(onNext: { rate in
-                        self.currenciesRates.value[rate.0] = rate.1
-                    }).disposed(by: self.disposeBag)
-        }).addDisposableTo(disposeBag)
+                .subscribe(onNext: { _ in
+                    self.updateRates()
+                            .subscribe(onNext: { rate in
+                                self.currenciesRates.value[rate.0] = rate.1
+                            }).disposed(by: self.disposeBag)
+                }).addDisposableTo(disposeBag)
     }
 
     func getRate(from: CurrencyType, to: CurrencyType) -> Double? {

@@ -13,9 +13,8 @@ class ExchangeViewController: UIViewController {
     private lazy var fromAmountField = AmountTextField(prefix: "-")
     private lazy var toAmountField = AmountTextField(prefix: "+")
 
-    private var viewModel = ExchangeViewModel()
-    private var fromScrollView: CurrencyScrollView!
-    private var toScrollView: CurrencyScrollView!
+    private var fromScrollView = CurrencyScrollView()
+    private var toScrollView = CurrencyScrollView(shaded: true)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,13 +31,9 @@ class ExchangeViewController: UIViewController {
     }
 
     private func createViews() {
-        fromScrollView = CurrencyScrollView(viewModel: viewModel.fromScrollViewModel)
         view.addSubview(fromScrollView)
-
         view.addSubview(fromAmountField)
         fromAmountField.becomeFirstResponder()
-
-        toScrollView = CurrencyScrollView(viewModel: viewModel.toScrollViewModel, shaded: true)
         view.addSubview(toScrollView)
         view.addSubview(toAmountField)
         toAmountField.textColor = UIColor.white.withAlphaComponent(0.8)
@@ -112,52 +107,47 @@ class ExchangeViewController: UIViewController {
     }
 
     private func bindModel() {
-        fromAmountField.rx.text
-                .subscribe(onNext: { (next: String?) in
-                    //If last character is one of (.,) we assume that user didn't end his input and we shoudln't update
-                    var value = next ?? ""
-                    if let last = value.characters.last, (last == "." || last == ",") {
-                    } else {
-                        self.viewModel.fromAmountInput.value = value
-                    }
-                    self.fromAmountField.setWidthToFitText()
-                })
-                .addDisposableTo(disposeBag)
-
-        viewModel.fromAmountOutput.asDriver()
-                .map({ item in
-                    item.toString()
-                })
-                .drive(onNext: { next in
-                    self.fromAmountField.text = next
-                    self.fromAmountField.setWidthToFitText()
-                })
-                .addDisposableTo(disposeBag)
+        let viewModel = ExchangeViewModel(exchangeTap: exchangeBtn.rx.tap.asObservable(),
+                fromItem: fromScrollView.viewModel.currentItem,
+                toItem: toScrollView.viewModel.currentItem,
+                fromFieldText: fromAmountField.rx.text.orEmpty.asObservable(),
+                toFieldText: toAmountField.rx.text.orEmpty.asObservable(),
+                exchangeService: DIContainer.Instance.resolve(ExchangeRateServiceProtocol.self)!,
+                accountsStorage: DIContainer.Instance.resolve(AccountStorage.self)!)
 
         toAmountField.rx.text
-                .subscribe(onNext: { (next: String?) in
-                    //If last character is one of (.,) we assume that user didn't end his input and we shoudln't update
-                    var value = next ?? ""
-                    if let last = value.characters.last, (last == "." || last == ",") {
-                    } else {
-                        self.viewModel.toFieldUpdate(value)
-                    }
+                .subscribe(onNext: { [unowned self] next in
                     self.toAmountField.setWidthToFitText()
                 })
                 .addDisposableTo(disposeBag)
 
-        viewModel.toAmountOutput.asDriver()
-                .map({ item in
-                    item.toString()
-                })
-                .drive(onNext: { next in
+        viewModel.toUpdated
+                .map {
+                    $0.toString()
+                }
+                .subscribe(onNext: { next in
                     self.toAmountField.text = next
                     self.toAmountField.setWidthToFitText()
                 })
                 .addDisposableTo(disposeBag)
 
-        exchangeBtn.rx.tap.subscribe(onNext: { _ in
-            self.viewModel.exchange()
+        fromAmountField.rx.text
+                .subscribe(onNext: { [unowned self] next in
+                    self.fromAmountField.setWidthToFitText()
+                })
+                .addDisposableTo(disposeBag)
+
+        viewModel.fromUpdated
+                .map {
+                    $0.toString()
+                }
+                .subscribe(onNext: { next in
+                    self.fromAmountField.text = next
+                    self.fromAmountField.setWidthToFitText()
+                })
+                .addDisposableTo(disposeBag)
+
+        viewModel.exchanged.subscribe(onNext: { [unowned self] next in
             self.fromAmountField.becomeFirstResponder()
         }).addDisposableTo(disposeBag)
 
@@ -165,19 +155,19 @@ class ExchangeViewController: UIViewController {
                 .bind(to: exchangeBtn.rx.isEnabled)
                 .addDisposableTo(disposeBag)
 
-        viewModel.amountPrefixIsHidden
+        viewModel.fromPrefixIsHidden
                 .bind(to: fromAmountField.prefixLbl.rx.isHidden)
                 .addDisposableTo(disposeBag)
 
-        viewModel.amountPrefixIsHidden
+        viewModel.toPrefixIsHidden
                 .bind(to: toAmountField.prefixLbl.rx.isHidden)
                 .addDisposableTo(disposeBag)
 
-        viewModel.exchangeRate.asObservable()
+        viewModel.exchangeRate
                 .bind(to: exchangeRateLbl.rx.text)
                 .addDisposableTo(disposeBag)
 
-        viewModel.exchangeRateReverted.asObservable()
+        viewModel.exchangeRateReverted
                 .bind(to: exchangeRateRevertedLbl.rx.text)
                 .addDisposableTo(disposeBag)
 

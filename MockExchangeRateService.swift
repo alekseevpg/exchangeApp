@@ -3,7 +3,7 @@ import RxSwift
 import RxCocoa
 @testable import Exchange
 
-class FakeRateService: ExchangeRateServiceProtocol {
+class MockExchangeRateService: ExchangeRateServiceProtocol {
 
     private(set) var currenciesRates: Variable<[CurrencyType: Double]> = Variable<[CurrencyType: Double]>([.eur: 0])
 

@@ -20,7 +20,7 @@
 		32CB77E88A4375FC3AA19CCD /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7F5210EE3C960F88B980 /* DIContainer.swift */; };
 		32CB77F0D7AA19F0064D57C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32CB72C31FC10E3F54934DF0 /* LaunchScreen.storyboard */; };
 		32CB786604EE5336E4CC9A94 /* ShadedLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7764AC0AED960524420D /* ShadedLayer.swift */; };
-		32CB79957B40141F84399032 /* FakeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7BE65E7E331EEB973378 /* FakeRateService.swift */; };
+		32CB79957B40141F84399032 /* MockExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7BE65E7E331EEB973378 /* MockExchangeRateService.swift */; };
 		32CB7A5F0AA033DE19CE02A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32CB710265D63031C1AD1038 /* Assets.xcassets */; };
 		32CB7A7E74757988867598A7 /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB70654DB5BE7EFF12CA3A /* ExchangeRateService.swift */; };
 		32CB7B8DDED729AD7429C103 /* KeyboardHeightObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CB7631BEFA5DE7827A806E /* KeyboardHeightObserver.swift */; };
@@ -66,7 +66,7 @@
 		32CB79DD5C75FE6A57B271C0 /* CurrencyScrollViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyScrollViewModel.swift; sourceTree = "<group>"; };
 		32CB7A655D01A10279E5524E /* DoubleExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleExtensions.swift; sourceTree = "<group>"; };
 		32CB7B42451C1BCF495E15FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		32CB7BE65E7E331EEB973378 /* FakeRateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeRateService.swift; sourceTree = SOURCE_ROOT; };
+		32CB7BE65E7E331EEB973378 /* MockExchangeRateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExchangeRateService.swift; sourceTree = SOURCE_ROOT; };
 		32CB7C69880FDAD823CC8092 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		32CB7C96C4A89AC53036E8E6 /* AmountTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmountTextField.swift; sourceTree = "<group>"; };
 		32CB7F24893B4986AFF51508 /* CurrencyType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyType.swift; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 		32CB7F3A8AD6EADBE40DC076 /* FakeImplementation */ = {
 			isa = PBXGroup;
 			children = (
-				32CB7BE65E7E331EEB973378 /* FakeRateService.swift */,
+				32CB7BE65E7E331EEB973378 /* MockExchangeRateService.swift */,
 			);
 			path = FakeImplementation;
 			sourceTree = "<group>";
@@ -489,7 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				32CB7091BBCCE51D74214280 /* AccountStorageTest.swift in Sources */,
-				32CB79957B40141F84399032 /* FakeRateService.swift in Sources */,
+				32CB79957B40141F84399032 /* MockExchangeRateService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,7 +6,7 @@ import RxCocoa
 
 final class CurrencyScrollView: UIView {
     private var disposeBag = DisposeBag()
-    var viewModel: CurrencyScrollViewModel!
+    var viewModel: CurrencyScrollViewModel
 
     private lazy var scrollView = UIScrollView()
     private lazy var pageControl = UIPageControl()
@@ -16,13 +16,13 @@ final class CurrencyScrollView: UIView {
     private var isShaded: Bool = false
 
     public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError()
     }
 
-    init(viewModel: CurrencyScrollViewModel, shaded: Bool = false) {
+    init(shaded: Bool = false) {
+        self.viewModel = CurrencyScrollViewModel()
         super.init(frame: .zero)
         self.isShaded = shaded
-        self.viewModel = viewModel
         self.createViews()
         self.setupConstraints()
         self.bindModel()
